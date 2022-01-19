@@ -1,0 +1,39 @@
+<template>
+  <v-footer dark padless>
+    <v-card flat tile class="indigo lighten-2 white--text text-center flex">
+      <v-card-text class="white--text">
+        <strong>
+          BookSearch | Copyright © {{ new Date().getFullYear() }} —
+          <a
+            class="pointer"
+            target="_blank"
+            href="https://www.inf.ed.ac.uk/teaching/courses/tts/"
+          >
+            Text Technologies For Data Science - Group Project
+          </a>
+          |
+          <a
+            class="pointer"
+            target="_blank"
+            href="https://github.com/orgs/Company-Report-Explorer/repositories"
+          >
+            <v-icon class="pb-1" dense>mdi-github</v-icon> GitHub
+          </a>
+        </strong>
+      </v-card-text>
+    </v-card>
+  </v-footer>
+</template>
+
+<style>
+.pointer {
+  cursor: pointer;
+}
+a,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
+  color: inherit !important;
+}
+</style>
