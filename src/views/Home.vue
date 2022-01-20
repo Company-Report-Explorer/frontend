@@ -3,7 +3,14 @@
     <v-form class="middle" @submit.prevent="search()">
       <v-row>
         <v-col>
-          <v-text-field label="Search Term" v-model="searchTerm"></v-text-field>
+          <v-text-field
+            label="Search Term"
+            v-model="searchTerm"
+            clear-icon="mdi-close"
+            @click:append="search"
+            clearable
+            append-icon="mdi-magnify"
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
