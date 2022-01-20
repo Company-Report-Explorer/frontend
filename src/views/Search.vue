@@ -1,16 +1,18 @@
 <template>
   <div class="home">
     <v-row align="center">
-      <v-col cols="2" lg="1">
-        <router-link to="/"> LOGO </router-link>
+      <v-col class="d-flex justify-center" cols="2" lg="1">
+        <router-link to="/">
+          <v-img class="mb-3" width="50px" src="@/assets/logo.svg"></v-img>
+        </router-link>
       </v-col>
       <v-col cols="6" lg="6">
-        <v-form @submit.prevent="search()">
+        <v-form @submit.prevent="updateSearch()">
           <v-text-field
             placeholder="Search Term"
             v-model="searchTerm"
             clear-icon="mdi-close"
-            @click:append="search"
+            @click:append="updateSearch"
             clearable
             append-icon="mdi-magnify"
           ></v-text-field>
@@ -21,7 +23,8 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" lg="12">
+      <v-col class="d-lg-block d-none" lg="1"></v-col>
+      <v-col cols="12" lg="11">
         <small v-show="books.length">{{
           `Found ${books.length} results (0.00 seconds)`
         }}</small>
@@ -35,6 +38,7 @@
       class="mb-1 transition"
       v-bind:class="{ 'opacity-0': loading }"
     >
+      <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col cols="12" lg="8">
         <Card :title="b.title" :words="b.words" />
       </v-col>
@@ -55,14 +59,17 @@ export default {
   },
   components: { Card },
   methods: {
-    search() {
-      if (!this.searchTerm) return;
+    updateSearch() {
+      if (!this.searchTerm || this.$route.query.q === this.searchTerm) return;
       this.$router.push({
         name: "Search",
         query: {
           q: this.searchTerm,
         },
       });
+      this.search();
+    },
+    search() {
       this.loading = true;
       setTimeout(() => {
         this.loading = false;

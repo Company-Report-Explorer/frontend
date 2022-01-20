@@ -2,6 +2,13 @@
   <div class="home">
     <v-form class="middle" @submit.prevent="search()">
       <v-row>
+        <v-col class="text-h1">
+          <div>
+            <v-img width="100px" src="@/assets/logo.svg"></v-img>Book Search
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
         <v-col>
           <v-text-field
             label="Search Term"
