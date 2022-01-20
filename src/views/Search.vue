@@ -80,12 +80,6 @@ export default {
         { title: "Book 3", words: ["Word6", "Word2"] },
       ];
     },
-    clear() {
-      this.loading = true;
-      setTimeout(() => {
-        this.books = [];
-      }, 500);
-    },
   },
 };
 </script>
