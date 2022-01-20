@@ -24,11 +24,12 @@
     </v-row>
     <v-row>
       <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col cols="12" lg="11">
+      <v-col cols="7" lg="4">
         <small v-show="books.length">{{
           `Found ${books.length} results (0.00 seconds)`
         }}</small>
       </v-col>
+      <!-- <v-col><small>Advanced</small></v-col> -->
     </v-row>
     <v-row
       justify="start"
