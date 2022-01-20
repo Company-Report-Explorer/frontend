@@ -2,8 +2,28 @@
   <div class="home">
     <v-form class="middle" @submit.prevent="search()">
       <v-row>
+        <v-col class="text-h1">
+          <div>
+            <v-img width="100px" src="@/assets/logo.svg"></v-img>Book Search
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col class="text-caption text-right">
+          Logo designed by:
+          <a href="https://logomakr.com/app/">LogoMakr.com/app</a>
+        </v-col>
+      </v-row>
+      <v-row>
         <v-col>
-          <v-text-field label="Search Term" v-model="searchTerm"></v-text-field>
+          <v-text-field
+            label="Search Term"
+            v-model="searchTerm"
+            clear-icon="mdi-close"
+            @click:append="search"
+            clearable
+            append-icon="mdi-magnify"
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -20,7 +40,7 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-row class="mt-16" justify="center">
+      <v-row class="my-16" justify="center">
         <router-link to="/about">About Us</router-link>
       </v-row>
     </v-form>
