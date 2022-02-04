@@ -25,8 +25,10 @@
     <v-row>
       <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col cols="7" lg="4">
-        <small v-show="books.length">{{
-          `Found ${books.length} results (0.00 seconds)`
+        <small v-show="allBooks.length">{{
+          `Found ${allBooks.length} results (${retrievalTime.toFixed(
+            4
+          )} seconds)`
         }}</small>
       </v-col>
       <!-- <v-col><small>Advanced</small></v-col> -->
@@ -34,7 +36,7 @@
     <v-row
       justify="start"
       transition="fade-transition"
-      v-for="b in books"
+      v-for="b in allBooks"
       :key="b.title"
       class="mb-1 transition"
       v-bind:class="{ 'opacity-0': loading }"
@@ -49,17 +51,21 @@
 
 <script>
 import Card from "@/components/Card.vue";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "Home",
+  computed: mapGetters(["allBooks", "retrievalTime"]),
   created() {
     this.searchTerm = this.$route.query.q;
     if (this.searchTerm) this.search();
   },
   data: () => {
-    return { books: [], loading: false, searchTerm: "" };
+    return { loading: false, searchTerm: "" };
   },
   components: { Card },
   methods: {
+    ...mapActions(["fetchBooks"]),
     updateSearch() {
       if (!this.searchTerm || this.$route.query.q === this.searchTerm) return;
       this.$router.push({
@@ -75,11 +81,8 @@ export default {
       setTimeout(() => {
         this.loading = false;
       }, 500);
-      this.books = [
-        { title: "Book 1", words: ["Word1", "Word2"] },
-        { title: "Book 2", words: ["Word1", "Word2"] },
-        { title: "Book 3", words: ["Word6", "Word2"] },
-      ];
+
+      this.fetchBooks(this.searchTerm);
     },
   },
 };

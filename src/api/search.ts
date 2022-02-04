@@ -1,0 +1,18 @@
+import axios from "axios";
+
+export async function callSearchApi(query: string): Promise<SearchState> {
+  const response = await axios.get(
+    `${
+      process.env.VUE_APP_ROOT_API || "http://127.0.0.1:8000"
+    }/search?q=${query}`
+  );
+
+  return adapter(response.data);
+}
+
+function adapter(apiResponse: SearchApiResponse): SearchState {
+  return {
+    retrievalTime: apiResponse?.retrieval_time || 0,
+    books: apiResponse?.results || [],
+  };
+}
