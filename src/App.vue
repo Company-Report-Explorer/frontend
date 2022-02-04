@@ -1,6 +1,6 @@
 <template>
   <v-app style="background: #eceff1">
-    <v-container style="min-height: 93.8vh">
+    <v-container style="min-height: 94.6vh">
       <router-view />
     </v-container>
     <Footer />

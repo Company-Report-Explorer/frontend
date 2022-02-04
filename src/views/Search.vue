@@ -43,7 +43,7 @@
     >
       <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col cols="12" lg="8">
-        <Card :title="b.title" :words="b.words" />
+        <Card :title="b.title" :author="b.author" :date="b.date" />
       </v-col>
     </v-row>
   </div>
