@@ -10,7 +10,7 @@ export async function callSearchApi(query: string): Promise<SearchState> {
 
 function adapter(apiResponse: SearchApiResponse): SearchState {
   return {
-    retrievalTime: apiResponse.retrieval_time,
-    books: apiResponse.results,
+    retrievalTime: apiResponse?.retrieval_time || 0,
+    books: apiResponse?.results || [],
   };
 }

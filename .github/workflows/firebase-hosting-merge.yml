@@ -7,7 +7,7 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 env:
-  VUE_APP_ROOT_API: ${{secrets.VUE_APP_ROOT_API}}
+  VUE_APP_ROOT_API: "${{ secrets.VUE_APP_ROOT_API }}"
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
