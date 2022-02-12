@@ -9,7 +9,7 @@
         v-on="on"
         @click="$emit('fetch')"
       >
-        Reviews
+        Reviews ({{ "99+" }})
       </v-btn>
     </template>
     <v-card>
@@ -39,6 +39,13 @@
             </v-list-item>
           </v-card-actions>
         </v-card>
+        <div class="d-flex justify-center">
+          <v-progress-circular
+            :size="30"
+            color="indigo"
+            indeterminate
+          ></v-progress-circular>
+        </div>
       </v-card-text>
       <!-- <v-card-actions>
         <v-btn color="green darken-1" text @click="dialog = false">
@@ -61,9 +68,15 @@ export default {
     return { dialog: false };
   },
   methods: {
-    ...mapActions(["lazyLoadReviews"]),
+    ...mapActions(["lazyLoadReviews", "clearReviews"]),
     onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
-      if (scrollHeight - scrollTop - clientHeight < 1) this.lazyLoadReviews("");
+      if (scrollHeight - scrollTop - clientHeight < 1 && scrollHeight > 20)
+        this.lazyLoadReviews("");
+    },
+  },
+  watch: {
+    dialog: function (newValue) {
+      if (!newValue) this.clearReviews();
     },
   },
 };

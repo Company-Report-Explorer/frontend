@@ -19,7 +19,13 @@ const actions = {
   async lazyLoadReviews({ commit }: { commit: Commit }, book: string) {
     const response = await callReviewApi(book);
 
-    commit("lazyReviews", response.reviews);
+    setTimeout(() => {
+      commit("lazyReviews", response.reviews);
+    }, 1000);
+  },
+
+  async clearReviews({ commit }: { commit: Commit }) {
+    commit("clear");
   },
 };
 
@@ -28,6 +34,7 @@ const mutations = {
     (state.reviews = reviews),
   lazyReviews: (state: ReviewState, reviews: ReviewResult[]) =>
     state.reviews.push(...reviews),
+  clear: (state: ReviewState) => (state.reviews = []),
 };
 
 export default {
