@@ -1,10 +1,8 @@
-import axios from "axios";
+import axios from "./axios";
 
 export async function callSearchApi(query: string): Promise<SearchState> {
   const response = await axios.get(
-    `${
-      process.env.VUE_APP_ROOT_API || "http://127.0.0.1:8000"
-    }/search?q=${query}`
+    `${process.env.VUE_APP_ROOT_API}/search?q=${query}`
   );
 
   return adapter(response.data);

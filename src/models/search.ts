@@ -1,4 +1,4 @@
-interface bookResult {
+interface BookResult {
   title: string;
   author: string;
   date: string;
@@ -6,10 +6,10 @@ interface bookResult {
 
 interface SearchState {
   retrievalTime: number;
-  books: bookResult[];
+  books: BookResult[];
 }
 
 interface SearchApiResponse {
   retrieval_time: number;
-  results: bookResult[];
+  results: BookResult[];
 }
