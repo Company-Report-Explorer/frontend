@@ -24,14 +24,19 @@
     </v-row>
     <v-row>
       <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col cols="7" lg="4">
+      <v-col cols="11" lg="4">
         <small v-show="allBooks.length">{{
           `Found ${allBooks.length} results (${retrievalTime.toFixed(
             4
           )} seconds)`
         }}</small>
       </v-col>
-      <!-- <v-col><small>Advanced</small></v-col> -->
+    </v-row>
+    <v-row v-if="loading">
+      <v-col class="d-lg-block d-none" lg="1"></v-col>
+      <v-col lg="8" class="d-flex justify-center">
+        <v-progress-circular indeterminate color="indigo"></v-progress-circular>
+      </v-col>
     </v-row>
     <v-row
       justify="start"
@@ -43,21 +48,32 @@
     >
       <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col cols="12" lg="8">
-        <Card :title="b.title" :author="b.author" :date="b.date" />
+        <Card
+          :title="b.title"
+          :author="b.author"
+          :date="b.publicationYear"
+          :desc="b.description"
+          :isbn="b.isbn"
+          :rating="b.rating"
+          :reviewCount="b.textReviewsCount"
+          :url="b.url"
+          :imageUrl="b.imageUrl"
+        />
       </v-col>
     </v-row>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Card from "@/components/Card.vue";
 import { mapGetters, mapActions } from "vuex";
-
-export default {
+import Vue from "vue";
+export default Vue.extend({
   name: "Home",
   computed: mapGetters(["allBooks", "retrievalTime"]),
   created() {
-    this.searchTerm = this.$route.query.q;
+    this.searchTerm =
+      typeof this.$route.query.q === "string" ? this.$route.query.q : "";
     if (this.searchTerm) this.search();
   },
   data: () => {
@@ -76,16 +92,13 @@ export default {
       });
       this.search();
     },
-    search() {
+    async search() {
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-
-      this.fetchBooks(this.searchTerm);
+      await this.fetchBooks(this.searchTerm);
+      this.loading = false;
     },
   },
-};
+});
 </script>
 
 <style>
