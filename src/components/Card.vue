@@ -17,9 +17,22 @@
       </v-img>
 
       <v-card-subtitle class="pb-0">
-        {{ desc.slice(0, 200) }}...
-        <span class="font-weight-bold text-caption" style="cursor: pointer">
+        {{ description }}
+        <span
+          class="font-weight-bold text-caption"
+          style="cursor: pointer"
+          v-if="!fullDesc"
+          @click="fullDesc = !fullDesc"
+        >
           Show More
+        </span>
+        <span
+          class="font-weight-bold text-caption"
+          style="cursor: pointer"
+          v-else
+          @click="fullDesc = !fullDesc"
+        >
+          Show Less
         </span>
       </v-card-subtitle>
 
@@ -68,7 +81,15 @@ export default Vue.extend({
     reviewCount: Number,
     imageUrl: String,
   },
+  data: () => {
+    return { fullDesc: false };
+  },
   components: { Review, Details },
+  computed: {
+    description() {
+      return this.fullDesc ? this.desc : this.desc.slice(0, 200) + "...";
+    },
+  },
   methods: {
     ...mapActions(["fetchReviews"]),
   },

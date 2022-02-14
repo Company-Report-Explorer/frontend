@@ -32,9 +32,9 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="goToGoodRead()">
-            Go to GoodRead
-          </v-btn>
+          <a :href="url" target="_blank">
+            <v-btn color="primary" text> Go to GoodRead </v-btn>
+          </a>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -57,13 +57,6 @@ export default Vue.extend({
     return {
       dialog: false,
     };
-  },
-  methods: {
-    goToGoodRead(): void {
-      const link = window.open(this.url, "_blank");
-      if (!link) return;
-      link.focus();
-    },
   },
 });
 </script>
