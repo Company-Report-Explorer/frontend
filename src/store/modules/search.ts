@@ -13,6 +13,8 @@ const getters = {
 
 const actions = {
   async fetchBooks({ commit }: { commit: Commit }, query: string) {
+    commit("clearBooks");
+
     const response = await callSearchApi(query);
 
     commit("setBooks", response.books);
@@ -21,9 +23,10 @@ const actions = {
 };
 
 const mutations = {
-  setBooks: (state: SearchState, books: BookResult[]) => (state.books = books),
+  setBooks: (state: SearchState, books: Book[]) => (state.books = books),
   setRetrievalTime: (state: SearchState, time: number) =>
     (state.retrievalTime = time),
+  clearBooks: (state: SearchState) => (state.books = []),
 };
 
 export default {

@@ -3,6 +3,7 @@ import { Commit } from "vuex";
 
 const state: ReviewState = {
   reviews: [],
+  // isEnd: false,
 };
 
 const getters = {
@@ -10,14 +11,36 @@ const getters = {
 };
 
 const actions = {
-  async fetchReviews({ commit }: { commit: Commit }, book: string) {
-    const response = await callReviewApi(book);
+  async fetchReviews(
+    { commit }: { commit: Commit },
+    {
+      book,
+      offset,
+      query,
+    }: {
+      book: string;
+      offset: number;
+      query: string;
+    }
+  ) {
+    const response = await callReviewApi(book, offset, query);
 
     commit("setReviews", response.reviews);
   },
 
-  async lazyLoadReviews({ commit }: { commit: Commit }, book: string) {
-    const response = await callReviewApi(book);
+  async lazyLoadReviews(
+    { commit }: { commit: Commit },
+    {
+      book,
+      offset,
+      query,
+    }: {
+      book: string;
+      offset: number;
+      query: string;
+    }
+  ) {
+    const response = await callReviewApi(book, offset, query);
 
     setTimeout(() => {
       commit("lazyReviews", response.reviews);

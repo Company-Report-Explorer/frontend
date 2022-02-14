@@ -7,8 +7,10 @@ interface ReviewResult {
 
 interface ReviewState {
   reviews: ReviewResult[];
+  isEnd?: boolean;
 }
 
 interface ReviewResponse {
   reviews?: ReviewResult[];
+  is_end?: boolean;
 }

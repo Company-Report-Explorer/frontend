@@ -71,7 +71,7 @@ export default {
     ...mapActions(["lazyLoadReviews", "clearReviews"]),
     onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
       if (scrollHeight - scrollTop - clientHeight < 1 && scrollHeight > 20)
-        this.lazyLoadReviews("");
+        this.lazyLoadReviews("", 0, "");
     },
   },
   watch: {
