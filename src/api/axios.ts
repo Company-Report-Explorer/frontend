@@ -7,6 +7,7 @@ instance.interceptors.request.use(
   (config) => {
     {
       // console.info("*", config);
+      store.dispatch("setLoading", true);
     }
     return config;
   },
@@ -22,11 +23,13 @@ instance.interceptors.response.use(
   (config) => {
     {
       // console.info("*", config);
+      store.dispatch("setLoading", false);
     }
     return config;
   },
   (error) => {
     {
+      store.dispatch("setLoading", false);
       store.dispatch("setError", "Network Error");
     }
     return Promise.reject(error);

@@ -18,31 +18,25 @@
 
       <v-card-subtitle class="pb-0">
         {{ description }}
-        <span
-          class="font-weight-bold text-caption"
-          style="cursor: pointer"
-          v-if="!fullDesc"
-          @click="fullDesc = !fullDesc"
-        >
-          Show More
-        </span>
-        <span
-          class="font-weight-bold text-caption"
-          style="cursor: pointer"
-          v-else
-          @click="fullDesc = !fullDesc"
-        >
-          Show Less
+        <span v-if="desc.length > 200">
+          <span
+            class="font-weight-bold text-caption indigo--text"
+            style="cursor: pointer"
+            v-if="!showMore"
+            @click="showMore = !showMore"
+          >
+            Show More
+          </span>
+          <span
+            class="font-weight-bold text-caption indigo--text"
+            style="cursor: pointer"
+            v-else
+            @click="showMore = !showMore"
+          >
+            Show Less
+          </span>
         </span>
       </v-card-subtitle>
-
-      <!-- <v-card-subtitle class="pb-0">
-        Publication Date: {{ date }}
-      </v-card-subtitle> -->
-
-      <!-- <v-card-text class="text--primary">
-      <div v-for="w in words" :key="w">{{ w }}</div>
-    </v-card-text> -->
 
       <v-card-actions>
         <Details
@@ -82,12 +76,14 @@ export default Vue.extend({
     imageUrl: String,
   },
   data: () => {
-    return { fullDesc: false };
+    return { showMore: false };
   },
   components: { Review, Details },
   computed: {
     description() {
-      return this.fullDesc ? this.desc : this.desc.slice(0, 200) + "...";
+      return this.showMore || String(this.desc).length <= 200
+        ? this.desc
+        : this.desc.slice(0, 200) + "...";
     },
   },
   methods: {

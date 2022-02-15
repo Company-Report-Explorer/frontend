@@ -32,10 +32,21 @@
         }}</small>
       </v-col>
     </v-row>
-    <v-row v-if="loading">
+    <v-row v-if="isLoading">
       <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col lg="8" class="d-flex justify-center">
-        <v-progress-circular indeterminate color="indigo"></v-progress-circular>
+      <v-col lg="8">
+        <v-sheet color="blue-grey lighten-5" class="pa-3">
+          <v-skeleton-loader
+            class="mx-auto"
+            type="image, article"
+          ></v-skeleton-loader>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row v-if="allBooks.length === 0 && !isLoading">
+      <v-col class="d-lg-block d-none" lg="1"></v-col>
+      <v-col class="d-flex justify-center font-weight-medium" lg="8">
+        - No Results Found -
       </v-col>
     </v-row>
     <v-row
@@ -44,7 +55,7 @@
       v-for="b in allBooks"
       :key="b.title"
       class="mb-1 transition"
-      v-bind:class="{ 'opacity-0': loading }"
+      v-bind:class="{ 'opacity-0': isLoading }"
     >
       <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col cols="12" lg="8">
@@ -70,14 +81,14 @@ import { mapGetters, mapActions } from "vuex";
 import Vue from "vue";
 export default Vue.extend({
   name: "Home",
-  computed: mapGetters(["allBooks", "retrievalTime"]),
+  computed: mapGetters(["allBooks", "retrievalTime", "isLoading"]),
   created() {
     this.searchTerm =
       typeof this.$route.query.q === "string" ? this.$route.query.q : "";
     if (this.searchTerm) this.search();
   },
   data: () => {
-    return { loading: false, searchTerm: "" };
+    return { searchTerm: "" };
   },
   components: { Card },
   methods: {
@@ -93,9 +104,7 @@ export default Vue.extend({
       this.search();
     },
     async search() {
-      this.loading = true;
       await this.fetchBooks(this.searchTerm);
-      this.loading = false;
     },
   },
 });

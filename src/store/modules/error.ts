@@ -12,19 +12,19 @@ const getters = {
 
 const actions = {
   setError({ commit }: { commit: Commit }, detail: string) {
-    commit("set", detail);
+    commit("setError", detail);
   },
   clearError({ commit }: { commit: Commit }) {
-    commit("clear");
+    commit("clearError");
   },
 };
 
 const mutations = {
-  set: (state: ErrorState, detail: string) => {
+  setError: (state: ErrorState, detail: string) => {
     state.isShown = true;
     state.detail = detail;
   },
-  clear: (state: ErrorState) => {
+  clearError: (state: ErrorState) => {
     state.isShown = false;
     state.detail = "";
   },

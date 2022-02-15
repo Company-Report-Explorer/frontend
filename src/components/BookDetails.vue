@@ -25,7 +25,7 @@
           <span class="font-weight-bold">Publication Year:</span>
           {{ publicationYear }} <br />
           <span class="font-weight-bold">Number of Reviews:</span>
-          {{ reviewCount }}
+          {{ addCommas(reviewCount) }} Review(s)
         </v-card-text>
 
         <v-divider></v-divider>
@@ -54,9 +54,12 @@ export default Vue.extend({
     reviewCount: Number,
   },
   data() {
-    return {
-      dialog: false,
-    };
+    return { dialog: false };
+  },
+  methods: {
+    addCommas(num: number): string {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
   },
 });
 </script>
