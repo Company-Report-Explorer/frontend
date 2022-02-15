@@ -25,16 +25,16 @@
           <span class="font-weight-bold">Publication Year:</span>
           {{ publicationYear }} <br />
           <span class="font-weight-bold">Number of Reviews:</span>
-          {{ reviewCount }}
+          {{ addCommas(reviewCount) }} Review(s)
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="goToGoodRead()">
-            Go to GoodRead
-          </v-btn>
+          <a :href="url" target="_blank">
+            <v-btn color="primary" text> Go to GoodRead </v-btn>
+          </a>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -54,15 +54,11 @@ export default Vue.extend({
     reviewCount: Number,
   },
   data() {
-    return {
-      dialog: false,
-    };
+    return { dialog: false };
   },
   methods: {
-    goToGoodRead(): void {
-      const link = window.open(this.url, "_blank");
-      if (!link) return;
-      link.focus();
+    addCommas(num: number): string {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
 });
