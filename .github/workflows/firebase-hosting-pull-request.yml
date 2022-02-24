@@ -18,3 +18,4 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WORLDSBESTBOOKSEARCH }}"
           channelId: develop
           projectId: worldsbestbooksearch
+          expires: 30d
