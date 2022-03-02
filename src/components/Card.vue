@@ -45,9 +45,11 @@
               :url="url"
             />
             <Review
+              :bookId="bookId"
+              :query="query"
               :bookTitle="title"
               :reviews="[]"
-              @fetch="fetchReviews('', 0, '')"
+              @fetch="fetchReviews({ bookId, query })"
             />
           </v-card-actions>
         </v-col>
@@ -63,6 +65,7 @@ import { mapActions } from "vuex";
 import Vue from "vue";
 export default Vue.extend({
   props: {
+    bookId: String,
     title: String,
     author: String,
     isbn: String,
@@ -72,6 +75,7 @@ export default Vue.extend({
     desc: String,
     reviewCount: Number,
     imageUrl: String,
+    query: String,
   },
   data: () => {
     return { showMore: false };

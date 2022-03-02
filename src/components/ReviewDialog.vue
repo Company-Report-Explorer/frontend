@@ -15,7 +15,10 @@
     <v-card>
       <v-card-title>
         <span class="text-h5 font-weight-bold">
-          Reviews of " {{ bookTitle }} "
+          Reviews of
+          <span class="font-italic">
+            {{ bookTitle }}
+          </span>
         </span>
       </v-card-title>
       <v-divider></v-divider>
@@ -26,7 +29,7 @@
           elevation="0"
           class="my-5"
           v-for="review in allReviews"
-          :key="review.by"
+          :key="review.id"
         >
           <v-card-text class="text-h5 font-weight-bold">
             " {{ review.text }} "
@@ -34,8 +37,30 @@
           <v-card-actions>
             <v-list-item class="grow">
               <v-list-item-content>
-                <v-list-item-title>— {{ review.by }}</v-list-item-title>
+                <v-list-item-title class="d-flex justify-end" style="gap: 1rem">
+                  <div>
+                    <v-icon class="pb-1" dense>mdi-thumb-up</v-icon> Likes:
+                    {{ review.likes }}
+                  </div>
+
+                  <div>
+                    <v-icon class="pb-1" dense>mdi-star</v-icon>
+                    Rating: {{ review.rating }}
+                  </div>
+
+                  <div>
+                    <v-icon class="pb-1" dense>mdi-comment</v-icon>
+                    Comments: {{ review.comments }}
+                  </div>
+                </v-list-item-title>
               </v-list-item-content>
+              <!-- <v-list-item-content>
+              </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-title>
+                  
+                </v-list-item-title>
+              </v-list-item-content> -->
             </v-list-item>
           </v-card-actions>
         </v-card>
@@ -59,19 +84,32 @@
   </v-dialog>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions } from "vuex";
-export default {
+import Vue from "vue";
+export default Vue.extend({
+  props: {
+    reviews: [],
+    bookTitle: String,
+    bookId: String,
+    query: String,
+  },
   computed: mapGetters(["allReviews"]),
-  props: ["reviews", "bookTitle"],
   data: () => {
-    return { dialog: false };
+    return { dialog: false, offset: 0 };
   },
   methods: {
     ...mapActions(["lazyLoadReviews", "clearReviews"]),
-    onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
+    onScroll(e: Event) {
+      const target = e.target as Element;
+      const size = 10;
+      const { scrollHeight, scrollTop, clientHeight } = target;
       if (scrollHeight - scrollTop - clientHeight < 1 && scrollHeight > 20)
-        this.lazyLoadReviews("", 0, "");
+        this.lazyLoadReviews({
+          bookId: this.bookId,
+          offset: ++this.offset * size,
+          query: this.query,
+        });
     },
   },
   watch: {
@@ -79,5 +117,5 @@ export default {
       if (!newValue) this.clearReviews();
     },
   },
-};
+});
 </script>

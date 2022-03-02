@@ -14,9 +14,13 @@
             clear-icon="mdi-close"
             @click:append="updateSearch"
             persistent-hint
-            :hint="`Found ${allBooks.length} results (${retrievalTime.toFixed(
-              4
-            )} seconds)`"
+            :hint="
+              allBooks.length
+                ? `Found ${allBooks.length} results (${retrievalTime.toFixed(
+                    4
+                  )} seconds)`
+                : 'Searching...'
+            "
             clearable
             append-icon="mdi-magnify"
           ></v-text-field>
@@ -60,6 +64,7 @@
       <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col cols="12" lg="8">
         <Card
+          :bookId="b.id"
           :title="b.title"
           :author="b.author"
           :date="b.publicationYear"
@@ -69,6 +74,7 @@
           :reviewCount="b.textReviewsCount"
           :url="b.url"
           :imageUrl="b.imageUrl"
+          :query="searchTerm"
         />
       </v-col>
     </v-row>

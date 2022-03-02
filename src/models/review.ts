@@ -1,8 +1,9 @@
-interface ReviewResult {
-  id: string;
-  by: string;
-  text: string;
-  likes?: number;
+interface ReviewResponse {
+  review_id: string;
+  review_text: string;
+  review_likes?: number;
+  rating?: number;
+  review_comments?: number;
 }
 
 interface ReviewState {
@@ -10,7 +11,15 @@ interface ReviewState {
   isEnd?: boolean;
 }
 
-interface ReviewResponse {
-  reviews?: ReviewResult[];
+interface GetReviewsResponse {
+  reviews: ReviewResponse[];
   is_end?: boolean;
+}
+
+interface ReviewResult {
+  id: string;
+  text: string;
+  likes?: number;
+  rating?: number;
+  comments?: number;
 }

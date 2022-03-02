@@ -14,16 +14,14 @@ const actions = {
   async fetchReviews(
     { commit }: { commit: Commit },
     {
-      book,
-      offset,
+      bookId,
       query,
     }: {
-      book: string;
-      offset: number;
+      bookId: string;
       query: string;
     }
   ) {
-    const response = await callReviewApi(book, offset, query);
+    const response = await callReviewApi(bookId, 0, query);
 
     commit("setReviews", response.reviews);
   },
@@ -31,16 +29,16 @@ const actions = {
   async lazyLoadReviews(
     { commit }: { commit: Commit },
     {
-      book,
+      bookId,
       offset,
       query,
     }: {
-      book: string;
+      bookId: string;
       offset: number;
       query: string;
     }
   ) {
-    const response = await callReviewApi(book, offset, query);
+    const response = await callReviewApi(bookId, offset, query);
 
     setTimeout(() => {
       commit("lazyReviews", response.reviews);

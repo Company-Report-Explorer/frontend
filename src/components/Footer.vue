@@ -17,7 +17,7 @@
             <a
               class="pointer"
               target="_blank"
-              href="https://github.com/orgs/Company-Report-Explorer/repositories"
+              href="https://github.com/orgs/NovelNovels/repositories"
             >
               <v-icon dense>mdi-github</v-icon> GitHub
             </a>
