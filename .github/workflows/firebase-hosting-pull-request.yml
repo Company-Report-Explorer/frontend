@@ -15,7 +15,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_WORLDSBESTBOOKSEARCH }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_NOVEL_NOVELS }}"
           channelId: develop
-          projectId: worldsbestbooksearch
+          projectId: novel-novels
           expires: 30d
