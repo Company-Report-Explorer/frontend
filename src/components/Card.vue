@@ -2,8 +2,15 @@
   <div>
     <v-card class="mx-auto">
       <v-row>
-        <v-col cols="2">
-          <v-img height="100%" :src="imageUrl" contain> </v-img>
+        <v-col cols="2" style="padding-right: 0">
+          <v-img
+            class="ml-4"
+            height="100%"
+            :src="bookImage"
+            v-on:error="imageNotFound = true"
+            contain
+          >
+          </v-img>
         </v-col>
         <v-col>
           <v-card-title>{{ title }} ({{ date }})</v-card-title>
@@ -78,7 +85,11 @@ export default Vue.extend({
     query: String,
   },
   data: () => {
-    return { showMore: false };
+    return {
+      showMore: false,
+      imageNotFound: false,
+      noImageSrc: require("@/assets/noImage.jpeg"),
+    };
   },
   components: { Review, Details },
   computed: {
@@ -86,6 +97,9 @@ export default Vue.extend({
       return this.showMore || String(this.desc).length <= 200
         ? this.desc
         : this.desc.slice(0, 200) + "...";
+    },
+    bookImage() {
+      return this.imageNotFound ? this.noImageSrc : this.imageUrl;
     },
   },
   methods: {
