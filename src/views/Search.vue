@@ -13,6 +13,10 @@
             v-model="searchTerm"
             clear-icon="mdi-close"
             @click:append="updateSearch"
+            persistent-hint
+            :hint="`Found ${allBooks.length} results (${retrievalTime.toFixed(
+              4
+            )} seconds)`"
             clearable
             append-icon="mdi-magnify"
           ></v-text-field>
@@ -25,11 +29,7 @@
     <v-row>
       <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col cols="11" lg="4">
-        <small v-show="allBooks.length">{{
-          `Found ${allBooks.length} results (${retrievalTime.toFixed(
-            4
-          )} seconds)`
-        }}</small>
+        <small v-show="allBooks.length">{{ `` }}</small>
       </v-col>
     </v-row>
     <v-row v-if="isLoading">
