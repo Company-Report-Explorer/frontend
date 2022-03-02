@@ -32,9 +32,7 @@
     </v-row>
     <v-row>
       <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col cols="11" lg="4">
-        <small v-show="allBooks.length">{{ `` }}</small>
-      </v-col>
+      <v-col cols="11" lg="4"> </v-col>
     </v-row>
     <v-row v-if="isLoading">
       <v-col class="d-lg-block d-none" lg="1"></v-col>

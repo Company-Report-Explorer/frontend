@@ -2,9 +2,9 @@
   <div>
     <v-card class="mx-auto">
       <v-row>
-        <v-col cols="2" style="padding-right: 0">
+        <v-col cols="12" sm="2">
           <v-img
-            class="ml-4"
+            class="ml-sm-6"
             height="100%"
             :src="bookImage"
             v-on:error="imageNotFound = true"

@@ -31,13 +31,16 @@
           v-for="review in allReviews"
           :key="review.id"
         >
-          <v-card-text class="text-h5 font-weight-bold">
+          <v-card-text class="text-md-h5 text-body-1 font-weight-bold">
             " {{ review.text }} "
           </v-card-text>
           <v-card-actions>
             <v-list-item class="grow">
               <v-list-item-content>
-                <v-list-item-title class="d-flex justify-end" style="gap: 1rem">
+                <v-list-item-title
+                  class="d-md-flex justify-end text-body-2"
+                  style="gap: 1rem"
+                >
                   <div>
                     <v-icon class="pb-1" dense>mdi-thumb-up</v-icon> Likes:
                     {{ review.likes }}
