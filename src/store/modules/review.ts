@@ -58,7 +58,10 @@ const mutations = {
     state.reviews.push(...reviews),
   setIsAllReviews: (state: ReviewState, isEnd: boolean) =>
     (state.isEnd = isEnd),
-  clear: (state: ReviewState) => (state.reviews = []),
+  clear: (state: ReviewState) => {
+    state.reviews = [];
+    state.isEnd = false;
+  },
 };
 
 export default {
