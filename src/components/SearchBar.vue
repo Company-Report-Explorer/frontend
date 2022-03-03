@@ -31,17 +31,19 @@
             rounded="0"
             class="white relative d-flex justify-space-between"
           >
-            <div class="grow pa-3" @click="onSelectHistory(history)">
-              <v-icon class="mr-2" dense>mdi-history</v-icon>
-              {{ history }}
-            </div>
-            <v-icon
-              class="pointer pa-3"
-              @click="onRemoveHistory(history)"
-              dense
-            >
-              mdi-close
-            </v-icon>
+            <v-row class="pa-3">
+              <v-col cols="3" md="1">
+                <v-icon class="mr-2" dense>mdi-history</v-icon>
+              </v-col>
+              <v-col @click="onSelectHistory(history)">
+                {{ history }}
+              </v-col>
+              <v-col cols="3" md="1" class="text-right">
+                <v-icon class="pointer" @click="onRemoveHistory(history)" dense>
+                  mdi-close
+                </v-icon>
+              </v-col>
+            </v-row>
           </v-card>
         </v-hover>
       </div>
