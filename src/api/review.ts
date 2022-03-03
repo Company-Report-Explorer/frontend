@@ -1,7 +1,7 @@
 import axios from "./axios";
 
 export async function callReviewApi(
-  bookID: string,
+  bookId: string,
   offset: number,
   query: string
 ): Promise<ReviewState> {
@@ -11,22 +11,32 @@ export async function callReviewApi(
 
   // return adapter(response.data);
 
-  // console.log(bookID, offset, query);
+  console.log(bookId, offset, query);
 
   return adapter({
     reviews: new Array(10).fill({}).map(() => ({
-      id: String(Math.floor(Math.random() * 1000000)),
-      by: String(Math.floor(Math.random() * 1000000)),
-      text: "Lorem minim esse Lorem Lorem consectetur aute labore labore in ipsum eiusmod labore anim id. Ea eu cillum occaecat et commodo. Occaecat magna ut culpa aliqua enim adipisicing voluptate sint laborum. Non ipsum nisi labore Lorem pariatur pariatur mollit non aliquip commodo anim reprehenderit. Voluptate quis do non amet laboris laboris magna duis eiusmod. Incididunt proident irure consectetur eiusmod cupidatat.",
-      likes: Math.floor(Math.random() * 500),
+      review_id: String(Math.floor(Math.random() * 1000000)),
+      // by: String(Math.floor(Math.random() * 1000000)),
+      review_text:
+        "Lorem minim esse Lorem Lorem consectetur aute labore labore in ipsum eiusmod labore anim id. Ea eu cillum occaecat et commodo. Occaecat magna ut culpa aliqua enim adipisicing voluptate sint laborum. Non ipsum nisi labore Lorem pariatur pariatur mollit non aliquip commodo anim reprehenderit. Voluptate quis do non amet laboris laboris magna duis eiusmod. Incididunt proident irure consectetur eiusmod cupidatat.",
+      review_likes: Math.floor(Math.random() * 500),
+      rating: Math.floor(Math.random() * 500) / 100,
+      review_comments: Math.floor(Math.random() * 500),
     })),
     is_end: false,
   });
 }
 
-function adapter(apiResponse: ReviewResponse): ReviewState {
+function adapter(apiResponse: GetReviewsResponse): ReviewState {
   return {
-    reviews: apiResponse?.reviews || [],
+    reviews:
+      apiResponse?.reviews.map((review) => ({
+        id: review.review_id,
+        text: review.review_text,
+        rating: review.rating || 0,
+        likes: review.review_likes || 0,
+        comments: review.review_comments || 0,
+      })) || [],
     // isEnd: !!apiResponse?.is_end,
   };
 }

@@ -26,7 +26,10 @@ const mutations = {
   setBooks: (state: SearchState, books: Book[]) => (state.books = books),
   setRetrievalTime: (state: SearchState, time: number) =>
     (state.retrievalTime = time),
-  clearBooks: (state: SearchState) => (state.books = []),
+  clearBooks: (state: SearchState) => {
+    state.books = [];
+    state.retrievalTime = 0;
+  },
 };
 
 export default {
