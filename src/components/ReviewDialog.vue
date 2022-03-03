@@ -57,6 +57,10 @@
                   </div>
                 </v-list-item-title>
               </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-title> </v-list-item-title>
+              </v-list-item-content>
+              -->
             </v-list-item>
           </v-card-actions>
         </v-card>
