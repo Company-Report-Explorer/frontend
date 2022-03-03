@@ -31,7 +31,7 @@
           v-for="review in allReviews"
           :key="review.id"
         >
-          <v-card-text class="text-md-h5 text-body-1 font-weight-bold">
+          <v-card-text class="text-md-h6 text-body-1 font-weight-bold">
             " {{ review.text }} "
           </v-card-text>
           <v-card-actions>
@@ -57,13 +57,6 @@
                   </div>
                 </v-list-item-title>
               </v-list-item-content>
-              <!-- <v-list-item-content>
-              </v-list-item-content>
-              <v-list-item-content>
-                <v-list-item-title>
-                  
-                </v-list-item-title>
-              </v-list-item-content> -->
             </v-list-item>
           </v-card-actions>
         </v-card>
