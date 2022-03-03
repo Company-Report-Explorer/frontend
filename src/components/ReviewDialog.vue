@@ -67,7 +67,7 @@
             </v-list-item>
           </v-card-actions>
         </v-card>
-        <div class="d-flex justify-center">
+        <div v-if="!isAllReviews" class="d-flex justify-center">
           <v-progress-circular
             :size="30"
             color="indigo"
@@ -75,14 +75,6 @@
           ></v-progress-circular>
         </div>
       </v-card-text>
-      <!-- <v-card-actions>
-        <v-btn color="green darken-1" text @click="dialog = false">
-          Disagree
-        </v-btn>
-        <v-btn color="green darken-1" text @click="dialog = false">
-          Agree
-        </v-btn>
-      </v-card-actions> -->
     </v-card>
   </v-dialog>
 </template>
@@ -97,7 +89,7 @@ export default Vue.extend({
     bookId: String,
     query: String,
   },
-  computed: mapGetters(["allReviews"]),
+  computed: mapGetters(["allReviews", "isAllReviews"]),
   data: () => {
     return { dialog: false, offset: 0 };
   },
@@ -107,7 +99,11 @@ export default Vue.extend({
       const target = e.target as Element;
       const size = 10;
       const { scrollHeight, scrollTop, clientHeight } = target;
-      if (scrollHeight - scrollTop - clientHeight < 1 && scrollHeight > 20)
+      if (
+        scrollHeight - scrollTop - clientHeight < 1 &&
+        scrollHeight > 20 &&
+        !this.isAllReviews
+      )
         this.lazyLoadReviews({
           bookId: this.bookId,
           offset: ++this.offset * size,

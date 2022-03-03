@@ -10,7 +10,7 @@
       @click:append="onFormSubmit()"
       persistent-hint
       :hint="
-        found
+        !isLoading
           ? `Found ${found} results (${retrievalTime.toFixed(4)} seconds)`
           : 'Searching...'
       "
@@ -59,6 +59,7 @@ export default Vue.extend({
     retrievalTime: Number,
     found: Number,
     searchHistory: Array as PropType<string[]>,
+    isLoading: Boolean,
   },
   data() {
     return {

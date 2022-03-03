@@ -14,6 +14,7 @@
           :retrievalTime="retrievalTime"
           :searchTerm="searchTerm"
           :searchHistory="searchHistory"
+          :isLoading="isLoading"
         />
       </v-col>
       <v-col class="d-flex justify-end" cols="4" lg="5">
