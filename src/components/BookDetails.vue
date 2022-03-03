@@ -33,7 +33,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <a :href="url" target="_blank">
-            <v-btn color="primary" text> Go to GoodRead </v-btn>
+            <v-btn color="primary" text> Go to GoodReads </v-btn>
           </a>
         </v-card-actions>
       </v-card>

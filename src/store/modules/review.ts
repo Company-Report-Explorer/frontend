@@ -3,11 +3,12 @@ import { Commit } from "vuex";
 
 const state: ReviewState = {
   reviews: [],
-  // isEnd: false,
+  isEnd: false,
 };
 
 const getters = {
   allReviews: (state: ReviewState) => state.reviews,
+  isAllReviews: (state: ReviewState) => state.isEnd,
 };
 
 const actions = {
@@ -24,6 +25,7 @@ const actions = {
     const response = await callReviewApi(bookId, 0, query);
 
     commit("setReviews", response.reviews);
+    commit("setIsAllReviews", response.isEnd);
   },
 
   async lazyLoadReviews(
@@ -40,9 +42,8 @@ const actions = {
   ) {
     const response = await callReviewApi(bookId, offset, query);
 
-    setTimeout(() => {
-      commit("lazyReviews", response.reviews);
-    }, 1000);
+    commit("lazyReviews", response.reviews);
+    commit("setIsAllReviews", response.isEnd);
   },
 
   async clearReviews({ commit }: { commit: Commit }) {
@@ -55,6 +56,8 @@ const mutations = {
     (state.reviews = reviews),
   lazyReviews: (state: ReviewState, reviews: ReviewResult[]) =>
     state.reviews.push(...reviews),
+  setIsAllReviews: (state: ReviewState, isEnd: boolean) =>
+    (state.isEnd = isEnd),
   clear: (state: ReviewState) => (state.reviews = []),
 };
 
