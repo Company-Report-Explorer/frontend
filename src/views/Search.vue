@@ -7,24 +7,14 @@
         </router-link>
       </v-col>
       <v-col cols="6" lg="6">
-        <v-form @submit.prevent="updateSearch()">
-          <v-text-field
-            placeholder="Search Term"
-            v-model="searchTerm"
-            clear-icon="mdi-close"
-            @click:append="updateSearch"
-            persistent-hint
-            :hint="
-              allBooks.length
-                ? `Found ${allBooks.length} results (${retrievalTime.toFixed(
-                    4
-                  )} seconds)`
-                : 'Searching...'
-            "
-            clearable
-            append-icon="mdi-magnify"
-          ></v-text-field>
-        </v-form>
+        <SearchBar
+          v-on:formSubmit="updateSearch"
+          v-on:removeHistory="removeHistory"
+          :found="allBooks.length"
+          :retrievalTime="retrievalTime"
+          :searchTerm="searchTerm"
+          :searchHistory="searchHistory"
+        />
       </v-col>
       <v-col class="d-flex justify-end" cols="4" lg="5">
         <router-link to="/about" class=""> About Us </router-link>
@@ -81,6 +71,7 @@
 
 <script lang="ts">
 import Card from "@/components/Card.vue";
+import SearchBar from "@/components/SearchBar.vue";
 import { mapGetters, mapActions } from "vuex";
 import Vue from "vue";
 export default Vue.extend({
@@ -92,13 +83,19 @@ export default Vue.extend({
     if (this.searchTerm) this.search();
   },
   data: () => {
-    return { searchTerm: "" };
+    return {
+      searchTerm: "",
+      searchHistory: JSON.parse(
+        localStorage.getItem("history") || "[]"
+      ) as string[],
+    };
   },
-  components: { Card },
+  components: { Card, SearchBar },
   methods: {
     ...mapActions(["fetchBooks"]),
-    updateSearch() {
-      if (!this.searchTerm || this.$route.query.q === this.searchTerm) return;
+    updateSearch(term: string) {
+      if (!term || this.$route.query.q === term) return;
+      this.searchTerm = term;
       this.$router.push({
         name: "Search",
         query: {
@@ -108,7 +105,24 @@ export default Vue.extend({
       this.search();
     },
     async search() {
+      this.saveToLocalStorage();
       await this.fetchBooks(this.searchTerm);
+      // (this.$refs.searchBar as HTMLElement).blur();
+    },
+    saveToLocalStorage() {
+      const isAllowed = localStorage.getItem("isAllowed");
+      if (!isAllowed) return;
+      this.searchHistory.push(this.searchTerm);
+      this.searchHistory = this.searchHistory.filter(
+        (value, index, self) => self.indexOf(value) === index
+      );
+      if (this.searchHistory.length >= 5)
+        this.searchHistory = this.searchHistory.slice(1);
+      localStorage.setItem("history", JSON.stringify(this.searchHistory));
+    },
+    removeHistory(history: string) {
+      this.searchHistory = this.searchHistory.filter((v) => v !== history);
+      localStorage.setItem("history", JSON.stringify(this.searchHistory));
     },
   },
 });

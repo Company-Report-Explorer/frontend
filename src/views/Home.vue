@@ -38,6 +38,22 @@
           >
             Search
           </v-btn>
+          <div
+            v-if="isAllowedLocalStorage"
+            class="text-center"
+            style="cursor: pointer"
+            @click="togglePermission()"
+          >
+            Not allow using local storage (Currently Allow)
+          </div>
+          <div
+            v-else
+            class="text-center"
+            @click="togglePermission()"
+            style="cursor: pointer"
+          >
+            Allow using local storage (Currently Not Allow)
+          </div>
         </v-col>
       </v-row>
       <v-row class="my-16" justify="center">
@@ -51,12 +67,20 @@
 export default {
   name: "Home",
   data: () => {
-    return { searchTerm: "" };
+    return {
+      searchTerm: "",
+      isAllowedLocalStorage: localStorage.getItem("isAllowed") === "true",
+    };
   },
   methods: {
     search() {
       if (!this.searchTerm) return;
       this.$router.push(`/search?q=${this.searchTerm}`);
+    },
+    togglePermission() {
+      localStorage.setItem("isAllowed", !this.isAllowedLocalStorage);
+      this.isAllowedLocalStorage = localStorage.getItem("isAllowed") === "true";
+      if (!this.isAllowedLocalStorage) localStorage.clear();
     },
   },
 };
