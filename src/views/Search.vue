@@ -77,7 +77,7 @@ import { mapGetters, mapActions } from "vuex";
 import Vue from "vue";
 export default Vue.extend({
   name: "Home",
-  computed: mapGetters(["allBooks", "retrievalTime", "isLoading"]),
+  computed: mapGetters(["allBooks", "retrievalTime"]),
   created() {
     this.searchTerm =
       typeof this.$route.query.q === "string" ? this.$route.query.q : "";
@@ -89,6 +89,7 @@ export default Vue.extend({
       searchHistory: JSON.parse(
         localStorage.getItem("history") || "[]"
       ) as string[],
+      isLoading: false,
     };
   },
   components: { Card, SearchBar },
@@ -107,8 +108,9 @@ export default Vue.extend({
     },
     async search() {
       this.saveToLocalStorage();
+      this.isLoading = true;
       await this.fetchBooks(this.searchTerm);
-      // (this.$refs.searchBar as HTMLElement).blur();
+      this.isLoading = false;
     },
     saveToLocalStorage() {
       const isAllowed = localStorage.getItem("isAllowed");

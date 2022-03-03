@@ -60,12 +60,8 @@
             </v-list-item>
           </v-card-actions>
         </v-card>
-        <div v-if="!isAllReviews" class="d-flex justify-center">
-          <v-progress-circular
-            :size="30"
-            color="indigo"
-            indeterminate
-          ></v-progress-circular>
+        <div v-if="!isAllReviews" class="d-flex justify-center text-h6 pa-3">
+          Loading...
         </div>
       </v-card-text>
     </v-card>
@@ -89,6 +85,7 @@ export default Vue.extend({
   methods: {
     ...mapActions(["lazyLoadReviews", "clearReviews"]),
     onScroll(e: Event) {
+      if (!this.dialog) return;
       const target = e.target as Element;
       const size = 10;
       const { scrollHeight, scrollTop, clientHeight } = target;
