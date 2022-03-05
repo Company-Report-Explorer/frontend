@@ -13,13 +13,20 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title>
+      <v-card-title class="d-flex justify-space-between">
         <span class="text-h5 font-weight-bold">
           Reviews of
           <span class="font-italic">
             {{ bookTitle }}
           </span>
         </span>
+        <v-icon
+          class="pointer text-bold mb-1 text-h5"
+          @click="dialog = false"
+          dense
+        >
+          mdi-close
+        </v-icon>
       </v-card-title>
       <v-divider></v-divider>
       <v-card-text @scroll="onScroll">

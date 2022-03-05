@@ -10,62 +10,84 @@
       @click:append="onFormSubmit()"
       persistent-hint
       :hint="
-        !isLoading
-          ? `Found ${found} results (${retrievalTime.toFixed(4)} seconds)`
-          : 'Searching...'
+        showHint
+          ? !isLoading
+            ? `Found ${found} results (${retrievalTime.toFixed(4)} seconds)`
+            : 'Searching...'
+          : ''
       "
       clearable
       append-icon="mdi-magnify"
+      counter="15"
     >
+      <template v-slot:counter>
+        <div
+          class="text-caption mt-lg-n1 pointer"
+          style="color: rgba(0, 0, 0, 0.6)"
+          @click="showAdvancedSetting = !showAdvancedSetting"
+        >
+          <span class="d-flex" v-if="!showAdvancedSetting">
+            <v-icon class="mr-lg-1" dense style="font-size: 0.8rem">
+              mdi-cog
+            </v-icon>
+            <span class="d-lg-block d-none"> Advanced Search </span>
+          </span>
+          <span class="d-flex" v-else>
+            <v-icon class="mr-lg-1" dense style="font-size: 0.8rem">
+              mdi-close-octagon
+            </v-icon>
+            <span class="d-lg-block d-none"> Close </span>
+          </span>
+        </div>
+      </template>
     </v-text-field>
-    <div class="mt-n5 autocomplete">
-      <div
-        v-show="showAutocomplete"
-        v-for="history in searchItems"
-        :key="history"
-      >
-        <v-hover v-slot="{ hover }">
-          <v-card
-            :elevation="hover ? 3 : 1"
-            :color="hover ? 'indigo lighten-5' : 'white'"
-            rounded="0"
-            class="white relative d-flex justify-space-between"
-          >
-            <v-row class="pa-3">
-              <v-col cols="3" md="1">
-                <v-icon class="mr-2" dense>mdi-history</v-icon>
-              </v-col>
-              <v-col @click="onSelectHistory(history)">
-                {{ history }}
-              </v-col>
-              <v-col cols="3" md="1" class="text-right">
-                <v-icon class="pointer" @click="onRemoveHistory(history)" dense>
-                  mdi-close
-                </v-icon>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-hover>
-      </div>
-    </div>
+
+    <Autocompletion
+      :searchItems="searchItems"
+      :showAutocomplete="showAutocomplete"
+      v-on:selectHistory="onSelectHistory"
+      v-on:removeHistory="onRemoveHistory"
+    />
+
+    <v-row v-if="showAdvancedSetting" class="mt-0 pa-0">
+      <v-col></v-col>
+      <v-col cols="4">
+        <div class="d-flex flex-column blue-grey lighten-4 mt-n4 rounded pa-1">
+          <v-checkbox
+            hide-details
+            label="Phrase Search"
+            class="transform-80"
+          ></v-checkbox>
+          <v-checkbox
+            hide-details
+            label="Proximity Search"
+            class="transform-80"
+          ></v-checkbox>
+        </div>
+      </v-col>
+    </v-row>
   </v-form>
 </template>
 
 <script lang="ts">
+import Autocompletion from "@/components/Autocompletion.vue";
 import Vue, { PropType } from "vue";
 export default Vue.extend({
+  components: { Autocompletion },
   props: {
     searchTerm: String,
     retrievalTime: Number,
     found: Number,
     searchHistory: Array as PropType<string[]>,
     isLoading: Boolean,
+    showHint: Boolean,
   },
   data() {
     return {
       term: this.searchTerm,
       showAutocomplete: false,
       searchItems: this.searchHistory,
+      showAdvancedSetting: false,
     };
   },
   methods: {
@@ -112,12 +134,11 @@ export default Vue.extend({
 </script>
 
 <style>
-.autocomplete {
-  z-index: 1;
-  position: absolute;
-  width: 100%;
-}
 .pointer {
   cursor: pointer;
+}
+.transform-80 {
+  transform: scale(0.8);
+  margin-top: 0 !important;
 }
 </style>

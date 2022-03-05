@@ -16,14 +16,26 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-text-field
+          <!-- <v-text-field
+            ref="searchBar"
+            @focus="showAutocomplete = true"
+            @blur="onBlur()"
             label="Search Term"
             v-model="searchTerm"
             clear-icon="mdi-close"
             @click:append="search"
             clearable
             append-icon="mdi-magnify"
-          ></v-text-field>
+          ></v-text-field> -->
+          <SearchBar
+            v-on:formSubmit="search"
+            v-on:removeHistory="removeHistory"
+            :found="0"
+            :retrievalTime="0"
+            :searchTerm="searchTerm"
+            :searchHistory="searchHistory"
+            :isLoading="true"
+          />
         </v-col>
       </v-row>
       <v-row>
@@ -38,21 +50,17 @@
           >
             Search
           </v-btn>
-          <div
-            v-if="isAllowedLocalStorage"
-            class="text-center"
-            style="cursor: pointer"
-            @click="togglePermission()"
-          >
-            Not allow using local storage (Currently Allow)
-          </div>
-          <div
-            v-else
-            class="text-center"
-            @click="togglePermission()"
-            style="cursor: pointer"
-          >
-            Allow using local storage (Currently Not Allow)
+          <div class="d-flex justify-end">
+            <v-switch
+              v-model="isAllowedLocalStorage"
+              inset
+              color="indigo"
+              hide-details
+              @click="togglePermission()"
+              :label="`${
+                isAllowedLocalStorage ? 'Allow' : 'Not allow'
+              } local storage`"
+            ></v-switch>
           </div>
         </v-col>
       </v-row>
@@ -63,27 +71,39 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import SearchBar from "@/components/SearchBar.vue";
+import Vue from "vue";
+export default Vue.extend({
   name: "Home",
+  components: { SearchBar },
   data: () => {
     return {
       searchTerm: "",
       isAllowedLocalStorage: localStorage.getItem("isAllowed") === "true",
+      searchHistory: JSON.parse(
+        localStorage.getItem("history") || "[]"
+      ) as string[],
     };
   },
   methods: {
-    search() {
-      if (!this.searchTerm) return;
-      this.$router.push(`/search?q=${this.searchTerm}`);
+    search(term: string) {
+      if (!term) return;
+      this.$router.push(`/search?q=${term}`);
     },
     togglePermission() {
-      localStorage.setItem("isAllowed", !this.isAllowedLocalStorage);
-      this.isAllowedLocalStorage = localStorage.getItem("isAllowed") === "true";
-      if (!this.isAllowedLocalStorage) localStorage.clear();
+      localStorage.setItem("isAllowed", String(this.isAllowedLocalStorage));
+      if (!this.isAllowedLocalStorage) {
+        this.searchHistory = [];
+        localStorage.clear();
+      }
+    },
+    removeHistory(history: string) {
+      this.searchHistory = this.searchHistory.filter((v) => v !== history);
+      localStorage.setItem("history", JSON.stringify(this.searchHistory));
     },
   },
-};
+});
 </script>
 
 <style>

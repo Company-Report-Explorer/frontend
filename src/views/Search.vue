@@ -1,7 +1,11 @@
 <template>
   <div class="home">
     <v-row align="center">
-      <v-col class="d-flex justify-center" cols="2" lg="1">
+      <v-col
+        class="d-flex justify-center align-self-start pt-4"
+        cols="2"
+        lg="1"
+      >
         <router-link to="/">
           <v-img class="mb-3" width="50px" src="@/assets/logo.svg"></v-img>
         </router-link>
@@ -15,9 +19,10 @@
           :searchTerm="searchTerm"
           :searchHistory="searchHistory"
           :isLoading="isLoading"
+          :showHint="true"
         />
       </v-col>
-      <v-col class="d-flex justify-end" cols="4" lg="5">
+      <v-col class="d-flex justify-end align-self-start pt-9" cols="4" lg="5">
         <router-link to="/about" class=""> About Us </router-link>
       </v-col>
     </v-row>
@@ -119,7 +124,7 @@ export default Vue.extend({
       this.searchHistory = this.searchHistory.filter(
         (value, index, self) => self.indexOf(value) === index
       );
-      if (this.searchHistory.length >= 5)
+      if (this.searchHistory.length > 5)
         this.searchHistory = this.searchHistory.slice(1);
       localStorage.setItem("history", JSON.stringify(this.searchHistory));
     },

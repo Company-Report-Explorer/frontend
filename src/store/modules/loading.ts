@@ -10,7 +10,13 @@ const getters = {
 
 const actions = {
   setLoading({ commit }: { commit: Commit }, loading: boolean) {
-    commit("setLoading", loading);
+    if (loading) {
+      commit("setLoading", loading);
+      return;
+    }
+    setTimeout(() => {
+      commit("setLoading", loading);
+    }, 100);
   },
 };
 
