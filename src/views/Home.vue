@@ -30,9 +30,10 @@
           <SearchBar
             v-on:formSubmit="search"
             v-on:removeHistory="removeHistory"
+            v-on:type="updateValue"
+            searchTerm=""
             :found="0"
             :retrievalTime="0"
-            :searchTerm="searchTerm"
             :searchHistory="searchHistory"
             :isLoading="true"
           />
@@ -45,7 +46,7 @@
             elevation="2"
             color="indigo lighten-4"
             large
-            @click="search()"
+            @click="search(searchTerm)"
             :disabled="!searchTerm"
           >
             Search
@@ -101,6 +102,9 @@ export default Vue.extend({
     removeHistory(history: string) {
       this.searchHistory = this.searchHistory.filter((v) => v !== history);
       localStorage.setItem("history", JSON.stringify(this.searchHistory));
+    },
+    updateValue(term: string) {
+      this.searchTerm = term;
     },
   },
 });

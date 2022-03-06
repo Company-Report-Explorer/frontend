@@ -127,6 +127,7 @@ export default Vue.extend({
         this.searchItems = this.searchHistory.filter((v) =>
           v.includes(newValue ?? "")
         );
+        this.$emit("type", newValue);
       },
     },
   },

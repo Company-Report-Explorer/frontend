@@ -16,9 +16,7 @@
             <v-col cols="3" md="1">
               <v-icon class="mr-2" dense>mdi-history</v-icon>
             </v-col>
-            <v-col @click="onSelectHistory(history)">
-              {{ history }}
-            </v-col>
+            <v-col @click="onSelectHistory(history)"> {{ history }} </v-col>
             <v-col cols="3" md="1" class="text-right">
               <v-icon class="pointer" @click="onRemoveHistory(history)" dense>
                 mdi-close
