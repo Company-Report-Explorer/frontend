@@ -26,10 +26,13 @@ interface Book {
 
 interface SearchState {
   retrievalTime: number;
+  totalTime: number;
   books: Book[];
+  correctedQuery: string;
 }
 
 interface SearchApiResponse {
   retrieval_time: number;
   results: BookResult[];
+  corrected_query: string;
 }

@@ -16,6 +16,7 @@
           v-on:removeHistory="removeHistory"
           :found="allBooks.length"
           :retrievalTime="retrievalTime"
+          :totalTime="totalTime"
           :searchTerm="searchTerm"
           :searchHistory="searchHistory"
           :isLoading="isLoading"
@@ -39,6 +40,19 @@
             type="image, article"
           ></v-skeleton-loader>
         </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row v-if="!isLoading && correctedQuery !== searchTerm" class="mt-n5">
+      <v-col class="d-lg-block d-none" lg="1"></v-col>
+      <v-col lg="8">
+        Did you mean
+        <span
+          class="indigo--text pointer font-weight-bold font-italic"
+          @click="updateSearch(correctedQuery)"
+        >
+          {{ correctedQuery }}
+        </span>
+        ?
       </v-col>
     </v-row>
     <v-row v-if="allBooks.length === 0 && !isLoading">
@@ -82,7 +96,12 @@ import { mapGetters, mapActions } from "vuex";
 import Vue from "vue";
 export default Vue.extend({
   name: "Home",
-  computed: mapGetters(["allBooks", "retrievalTime"]),
+  computed: mapGetters([
+    "allBooks",
+    "retrievalTime",
+    "totalTime",
+    "correctedQuery",
+  ]),
   created() {
     this.searchTerm =
       typeof this.$route.query.q === "string" ? this.$route.query.q : "";

@@ -9,20 +9,35 @@
       clear-icon="mdi-close"
       @click:append="onFormSubmit()"
       persistent-hint
-      :hint="
-        showHint
-          ? !isLoading
-            ? `Found ${found} results (${retrievalTime.toFixed(4)} seconds)`
-            : 'Searching...'
-          : ''
-      "
+      hint=" "
       clearable
       append-icon="mdi-magnify"
       counter="15"
     >
+      <template v-slot:message>
+        <div v-if="showHint">
+          <div v-if="isLoading">Searching...</div>
+          <div v-else>
+            Found {{ found }} results ({{ totalTime.toFixed(4) }} seconds)
+            <v-tooltip bottom color="dark">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon class="text-caption" v-bind="attrs" v-on="on">
+                  mdi-information
+                </v-icon>
+              </template>
+              <span class="text-caption">
+                HTTPS and Server:
+                {{ (totalTime - retrievalTime).toFixed(4) }} seconds<br />
+                Retrieval Time: {{ retrievalTime.toFixed(4) }} seconds<br />
+                Total Time: {{ totalTime.toFixed(4) }} seconds
+              </span>
+            </v-tooltip>
+          </div>
+        </div></template
+      >
       <template v-slot:counter>
         <div
-          class="text-caption mt-lg-n1 pointer"
+          class="text-caption mt-lg-n1 pointer d-md-block d-none"
           style="color: rgba(0, 0, 0, 0.6)"
           @click="showAdvancedSetting = !showAdvancedSetting"
         >
@@ -30,13 +45,15 @@
             <v-icon class="mr-lg-1" dense style="font-size: 0.8rem">
               mdi-cog
             </v-icon>
-            <span class="d-lg-block d-none"> Advanced Search </span>
+            <span class="d-lg-block d-none unselectable">
+              Advanced Search
+            </span>
           </span>
           <span class="d-flex" v-else>
             <v-icon class="mr-lg-1" dense style="font-size: 0.8rem">
               mdi-close-octagon
             </v-icon>
-            <span class="d-lg-block d-none"> Close </span>
+            <span class="d-lg-block d-none unselectable"> Close </span>
           </span>
         </div>
       </template>
@@ -49,21 +66,10 @@
       v-on:removeHistory="onRemoveHistory"
     />
 
-    <v-row v-if="showAdvancedSetting" class="mt-0 pa-0">
-      <v-col></v-col>
-      <v-col cols="4">
-        <div class="d-flex flex-column blue-grey lighten-4 mt-n4 rounded pa-1">
-          <v-checkbox
-            hide-details
-            label="Phrase Search"
-            class="transform-80"
-          ></v-checkbox>
-          <v-checkbox
-            hide-details
-            label="Proximity Search"
-            class="transform-80"
-          ></v-checkbox>
-        </div>
+    <v-row v-if="showAdvancedSetting" class="mt-0 pa-0 d-md-flex d-none">
+      <v-col class="d-lg-block d-none"></v-col>
+      <v-col cols="12" lg="7">
+        <AdvancedSearch class="mt-n2" />
       </v-col>
     </v-row>
   </v-form>
@@ -71,12 +77,14 @@
 
 <script lang="ts">
 import Autocompletion from "@/components/Autocompletion.vue";
+import AdvancedSearch from "@/components/AdvancedSearch.vue";
 import Vue, { PropType } from "vue";
 export default Vue.extend({
-  components: { Autocompletion },
+  components: { Autocompletion, AdvancedSearch },
   props: {
     searchTerm: String,
     retrievalTime: Number,
+    totalTime: Number,
     found: Number,
     searchHistory: Array as PropType<string[]>,
     isLoading: Boolean,
@@ -106,7 +114,7 @@ export default Vue.extend({
     onBlur() {
       setTimeout(() => {
         this.showAutocomplete = false;
-      }, 100);
+      }, 200);
     },
   },
   watch: {
@@ -141,5 +149,13 @@ export default Vue.extend({
 .transform-80 {
   transform: scale(0.8);
   margin-top: 0 !important;
+}
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 </style>
