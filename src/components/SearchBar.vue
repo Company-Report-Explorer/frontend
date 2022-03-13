@@ -129,7 +129,7 @@ export default Vue.extend({
     },
     onApplyAdvancedSearch() {
       this.showAdvancedSetting = false;
-      this.$emit("applyAdvancedSearch");
+      this.$emit("applyAdvancedSearch", this.term);
     },
   },
   watch: {

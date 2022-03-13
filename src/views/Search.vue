@@ -181,11 +181,11 @@ export default Vue.extend({
       this.searchHistory = this.searchHistory.filter((v) => v !== history);
       localStorage.setItem("history", JSON.stringify(this.searchHistory));
     },
-    advancedSearch() {
+    advancedSearch(term: string) {
       this.pruneOptions = Object.fromEntries(
         Object.entries(this.getAdvancedOptions).filter((v) => v[1])
       );
-      this.updateSearch(this.searchTerm, true);
+      this.updateSearch(term, true);
     },
   },
   beforeDestroy() {
