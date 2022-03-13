@@ -110,6 +110,17 @@ export default Vue.extend({
   created() {
     this.searchTerm =
       typeof this.$route.query.q === "string" ? this.$route.query.q : "";
+    const options = {
+      qe: this.$route.query.qe,
+      ss: this.$route.query.ss,
+      fromYear: this.$route.query.fromYear,
+      toYear: this.$route.query.toYear,
+      rating: this.$route.query.rating,
+    };
+    this.setAdvancedOptions(options);
+    this.pruneOptions = Object.fromEntries(
+      Object.entries(options).filter((v) => v[1])
+    );
     if (this.searchTerm) this.search();
   },
   data: () => {
@@ -124,7 +135,12 @@ export default Vue.extend({
   },
   components: { Card, SearchBar },
   methods: {
-    ...mapActions(["fetchBooks", "clearAdvancedOptions", "clearReviews"]),
+    ...mapActions([
+      "fetchBooks",
+      "clearAdvancedOptions",
+      "clearReviews",
+      "setAdvancedOptions",
+    ]),
     updateSearch(term: string, force: boolean = false) {
       if (!force && (!term || this.$route.query.q === term)) return;
       this.searchTerm = term;
