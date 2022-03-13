@@ -9,7 +9,7 @@
         v-on="on"
         @click="$emit('fetch')"
       >
-        Reviews ({{ "99+" }})
+        Reviews ({{ noOfReviews > 99 ? "99+" : noOfReviews || 0 }})
       </v-btn>
     </template>
     <v-card>
@@ -84,6 +84,7 @@ export default Vue.extend({
     bookTitle: String,
     bookId: String,
     query: String,
+    noOfReviews: Number,
   },
   computed: mapGetters(["allReviews", "isAllReviews"]),
   data: () => {

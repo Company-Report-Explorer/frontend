@@ -1,4 +1,4 @@
-interface BookResult {
+export interface BookResult {
   book_id: string;
   book_title: string;
   author: string;
@@ -11,7 +11,7 @@ interface BookResult {
   text_reviews_count?: number;
 }
 
-interface Book {
+export interface Book {
   id: string;
   title: string;
   author?: string;
@@ -24,14 +24,14 @@ interface Book {
   textReviewsCount?: number;
 }
 
-interface SearchState {
+export interface SearchState {
   retrievalTime: number;
   totalTime: number;
   books: Book[];
   correctedQuery: string;
 }
 
-interface SearchApiResponse {
+export interface SearchApiResponse {
   retrieval_time: number;
   results: BookResult[];
   corrected_query: string;

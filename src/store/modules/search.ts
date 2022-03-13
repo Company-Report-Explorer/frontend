@@ -1,5 +1,8 @@
-import { callSearchApi } from "@/api/search";
 import { Commit } from "vuex";
+
+import { callSearchApi } from "@/api/search";
+import { Book, SearchState } from "@/models/search";
+import { AdvancedSearchOptions } from "@/models/advancedSearch";
 
 const state: SearchState = {
   totalTime: 0,
@@ -16,10 +19,19 @@ const getters = {
 };
 
 const actions = {
-  async fetchBooks({ commit }: { commit: Commit }, query: string) {
+  async fetchBooks(
+    { commit }: { commit: Commit },
+    {
+      query,
+      options,
+    }: {
+      query: string;
+      options: AdvancedSearchOptions;
+    }
+  ) {
     commit("clearBooks");
 
-    const response = await callSearchApi(query);
+    const response = await callSearchApi(query, options);
 
     commit("setBooks", response.books);
     commit("setRetrievalTime", response.retrievalTime);

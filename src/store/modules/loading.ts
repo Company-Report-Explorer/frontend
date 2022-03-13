@@ -1,5 +1,7 @@
 import { Commit } from "vuex";
 
+import { LoadingState } from "@/models/error";
+
 const state: LoadingState = {
   isLoading: false,
 };

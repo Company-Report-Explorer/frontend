@@ -14,6 +14,7 @@
         <SearchBar
           v-on:formSubmit="updateSearch"
           v-on:removeHistory="removeHistory"
+          v-on:applyAdvancedSearch="advancedSearch"
           :found="allBooks.length"
           :retrievalTime="retrievalTime"
           :totalTime="totalTime"
@@ -21,6 +22,7 @@
           :searchHistory="searchHistory"
           :isLoading="isLoading"
           :showHint="true"
+          :showAdvancedSearch="true"
         />
       </v-col>
       <v-col class="d-flex justify-end align-self-start pt-9" cols="4" lg="5">
@@ -42,7 +44,7 @@
         </v-sheet>
       </v-col>
     </v-row>
-    <v-row v-if="!isLoading && correctedQuery !== searchTerm" class="mt-n5">
+    <v-row v-if="!isLoading && correctedQuery" class="mt-n5">
       <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col lg="8">
         Did you mean
@@ -90,10 +92,12 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
+import { mapGetters, mapActions } from "vuex";
+
 import Card from "@/components/Card.vue";
 import SearchBar from "@/components/SearchBar.vue";
-import { mapGetters, mapActions } from "vuex";
-import Vue from "vue";
+
 export default Vue.extend({
   name: "Home",
   computed: mapGetters([
@@ -101,6 +105,7 @@ export default Vue.extend({
     "retrievalTime",
     "totalTime",
     "correctedQuery",
+    "getAdvancedOptions",
   ]),
   created() {
     this.searchTerm =
@@ -114,26 +119,35 @@ export default Vue.extend({
         localStorage.getItem("history") || "[]"
       ) as string[],
       isLoading: false,
+      pruneOptions: {},
     };
   },
   components: { Card, SearchBar },
   methods: {
-    ...mapActions(["fetchBooks"]),
-    updateSearch(term: string) {
-      if (!term || this.$route.query.q === term) return;
+    ...mapActions(["fetchBooks", "clearAdvancedOptions", "clearReviews"]),
+    updateSearch(term: string, force: boolean = false) {
+      if (!force && (!term || this.$route.query.q === term)) return;
       this.searchTerm = term;
-      this.$router.push({
-        name: "Search",
-        query: {
-          q: this.searchTerm,
-        },
-      });
+      this.$router
+        .push({
+          name: "Search",
+          query: {
+            q: this.searchTerm,
+            ...this.pruneOptions,
+          },
+        })
+        .catch((err) => {
+          console.log("Error occurred: ", err);
+        });
       this.search();
     },
     async search() {
       this.saveToLocalStorage();
       this.isLoading = true;
-      await this.fetchBooks(this.searchTerm);
+      await this.fetchBooks({
+        query: this.searchTerm,
+        options: this.pruneOptions,
+      });
       this.isLoading = false;
     },
     saveToLocalStorage() {
@@ -151,6 +165,16 @@ export default Vue.extend({
       this.searchHistory = this.searchHistory.filter((v) => v !== history);
       localStorage.setItem("history", JSON.stringify(this.searchHistory));
     },
+    advancedSearch() {
+      this.pruneOptions = Object.fromEntries(
+        Object.entries(this.getAdvancedOptions).filter((v) => v[1])
+      );
+      this.updateSearch(this.searchTerm, true);
+    },
+  },
+  beforeDestroy() {
+    this.clearReviews();
+    this.clearAdvancedOptions();
   },
 });
 </script>

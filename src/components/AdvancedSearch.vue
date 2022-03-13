@@ -59,24 +59,59 @@
       ></v-rating>
     </div>
     <v-divider class="my-2" />
-    <v-btn color="blue-grey" dark depressed> Apply </v-btn>
+    <v-row>
+      <v-col>
+        <v-btn color="red lighten-2" @click="reset()" dark depressed block>
+          Reset
+        </v-btn>
+      </v-col>
+      <v-col>
+        <v-btn color="blue-grey" @click="apply()" dark depressed block>
+          Apply
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import { mapActions } from "vuex";
 export default Vue.extend({
   data() {
+    const oldOptions = this.$store.getters.getAdvancedOptions;
     return {
-      queryExpansion: false,
-      strictSearch: false,
-      fromYear: null,
-      toYear: null,
-      rating: 3,
+      queryExpansion: oldOptions.qe || false,
+      strictSearch: oldOptions.ss || false,
+      fromYear: oldOptions.fromYear || null,
+      toYear: oldOptions.toYear || null,
+      rating: oldOptions.rating || 0,
       yearList: [...Array(new Date().getFullYear() - 1949).keys()]
         .map((v) => v + 1950)
         .reverse(),
     };
+  },
+  methods: {
+    ...mapActions(["setAdvancedOptions", "clearAdvancedOptions"]),
+    apply() {
+      const options = {
+        qe: this.queryExpansion,
+        ss: this.strictSearch,
+        fromYear: this.fromYear,
+        toYear: this.toYear,
+        rating: this.rating,
+      };
+      this.setAdvancedOptions(options);
+      this.$emit("applyAdvancedSearch");
+    },
+    reset() {
+      this.queryExpansion = false;
+      this.strictSearch = false;
+      this.fromYear = "";
+      this.toYear = "";
+      this.rating = 0;
+      this.clearAdvancedOptions();
+    },
   },
 });
 </script>

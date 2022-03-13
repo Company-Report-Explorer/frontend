@@ -1,5 +1,7 @@
 import axios from "./axios";
 
+import { ReviewState, GetReviewsResponse } from "@/models/review";
+
 export async function callReviewApi(
   bookId: string,
   offset: number,

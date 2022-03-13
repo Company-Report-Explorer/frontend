@@ -12,7 +12,7 @@
       hint=" "
       clearable
       append-icon="mdi-magnify"
-      counter="15"
+      :counter="showAdvancedSearch ? 0 : false"
     >
       <template v-slot:message>
         <div v-if="showHint">
@@ -37,16 +37,21 @@
       >
       <template v-slot:counter>
         <div
+          v-if="showAdvancedSearch"
           class="text-caption mt-lg-n1 pointer d-md-block d-none"
           style="color: rgba(0, 0, 0, 0.6)"
           @click="showAdvancedSetting = !showAdvancedSetting"
         >
-          <span class="d-flex" v-if="!showAdvancedSetting">
+          <span
+            class="d-flex"
+            v-if="showAdvancedSearch && !showAdvancedSetting"
+          >
             <v-icon class="mr-lg-1" dense style="font-size: 0.8rem">
               mdi-cog
             </v-icon>
             <span class="d-lg-block d-none unselectable">
               Advanced Search
+              {{ isAdvancedOptionsOn ? "(Active)" : "" }}
             </span>
           </span>
           <span class="d-flex" v-else>
@@ -69,18 +74,23 @@
     <v-row v-if="showAdvancedSetting" class="mt-0 pa-0 d-md-flex d-none">
       <v-col class="d-lg-block d-none"></v-col>
       <v-col cols="12" lg="7">
-        <AdvancedSearch class="mt-n2" />
+        <AdvancedSearch
+          class="mt-n2"
+          v-on:applyAdvancedSearch="onApplyAdvancedSearch"
+        />
       </v-col>
     </v-row>
   </v-form>
 </template>
 
 <script lang="ts">
+import Vue, { PropType } from "vue";
+import { mapGetters } from "vuex";
 import Autocompletion from "@/components/Autocompletion.vue";
 import AdvancedSearch from "@/components/AdvancedSearch.vue";
-import Vue, { PropType } from "vue";
 export default Vue.extend({
   components: { Autocompletion, AdvancedSearch },
+  computed: mapGetters(["isAdvancedOptionsOn"]),
   props: {
     searchTerm: String,
     retrievalTime: Number,
@@ -89,6 +99,7 @@ export default Vue.extend({
     searchHistory: Array as PropType<string[]>,
     isLoading: Boolean,
     showHint: Boolean,
+    showAdvancedSearch: Boolean,
   },
   data() {
     return {
@@ -116,8 +127,17 @@ export default Vue.extend({
         this.showAutocomplete = false;
       }, 200);
     },
+    onApplyAdvancedSearch() {
+      this.showAdvancedSetting = false;
+      this.$emit("applyAdvancedSearch");
+    },
   },
   watch: {
+    isLoading: {
+      handler: function (newValue: boolean) {
+        if (newValue) this.showAdvancedSetting = false;
+      },
+    },
     searchTerm: {
       handler: function (newValue: string) {
         this.term = newValue;

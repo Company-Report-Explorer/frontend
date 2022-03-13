@@ -55,6 +55,7 @@
               :bookId="bookId"
               :query="query"
               :bookTitle="title"
+              :noOfReviews="reviewCount"
               :reviews="[]"
               @fetch="fetchReviews({ bookId, query })"
             />

@@ -1,10 +1,23 @@
 import axios from "./axios";
 
-export async function callSearchApi(query: string): Promise<SearchState> {
+import { SearchState, SearchApiResponse } from "@/models/search";
+import { AdvancedSearchOptions } from "@/models/advancedSearch";
+
+export async function callSearchApi(
+  query: string,
+  advSearch: AdvancedSearchOptions
+): Promise<SearchState> {
   const start = new Date().getTime();
 
+  const queryParams = new URLSearchParams({
+    q: query,
+    ...Object.fromEntries(
+      Object.entries(advSearch).map((v) => [v[0], String(v[1])])
+    ),
+  });
+
   const response = await axios.get(
-    `${process.env.VUE_APP_ROOT_API}/search?q=${query}`
+    `${process.env.VUE_APP_ROOT_API}/search?${queryParams.toString()}`
   );
 
   const end = new Date().getTime();
