@@ -3,17 +3,6 @@
     <span class="text-h6">Advanced Search</span>
     <v-divider class="my-3" />
     <div class="d-flex align-center">
-      Query Expansion
-      <v-switch
-        class="pa-0 ma-0 ml-2"
-        v-model="queryExpansion"
-        color="indigo"
-        hide-details=""
-        :label="`${queryExpansion ? 'On' : 'Off'}`"
-      ></v-switch>
-    </div>
-    <v-divider class="my-3" />
-    <div class="d-flex align-center">
       Strict Search
       <v-switch
         class="pa-0 ma-0 ml-2"
