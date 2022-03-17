@@ -9,7 +9,9 @@
       ></v-img>
 
       <v-card-title> {{ title }} {{ date ? `(${date})` : "" }} </v-card-title>
-      <v-card-subtitle> by {{ author }} </v-card-subtitle>
+      <v-card-subtitle>
+        by <span class="font-weight-bold">{{ author }}</span>
+      </v-card-subtitle>
 
       <v-card-subtitle>
         <TextShowMore :fullText="desc" />
@@ -28,17 +30,23 @@
       <v-expand-transition>
         <div v-show="show">
           <v-divider></v-divider>
-
           <v-card-text>
-            <span class="font-weight-bold">Author:</span> {{ author }} <br />
-            <span class="font-weight-bold">ISBN:</span> {{ isbn || "N/A" }}
-            <br />
-            <span class="font-weight-bold">Rating:</span> {{ rating }} / 5.00
-            <br />
-            <span class="font-weight-bold">Publication Year:</span>
-            {{ date || "-" }} <br />
-            <span class="font-weight-bold">Number of Reviews:</span>
-            {{ addCommas(reviewCount) }} Review(s)
+            <div class="mb-4">
+              <span class="font-weight-bold">Author:</span> {{ author }} <br />
+              <span class="font-weight-bold">ISBN:</span> {{ isbn || "N/A" }}
+              <br />
+              <span class="font-weight-bold">Rating:</span> {{ rating }} / 5.00
+              <br />
+              <span class="font-weight-bold">Publication Year:</span>
+              {{ date || "-" }} <br />
+              <span class="font-weight-bold">Number of Reviews:</span>
+              {{ addCommas(reviewCount) }} Review(s)
+            </div>
+            <div class="text-right">
+              <a :href="url" target="_blank">
+                <v-btn color="indigo" dark text>Goodreads</v-btn>
+              </a>
+            </div>
           </v-card-text>
         </div>
       </v-expand-transition>

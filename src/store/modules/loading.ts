@@ -18,7 +18,7 @@ const actions = {
     }
     setTimeout(() => {
       commit("popLoading");
-    }, 1000);
+    }, 100);
   },
 };
 
