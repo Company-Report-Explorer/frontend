@@ -71,15 +71,17 @@
       v-on:removeHistory="onRemoveHistory"
     />
 
-    <v-row v-if="showAdvancedSetting" class="mt-0 pa-0 d-md-flex d-none">
-      <v-col class="d-lg-block d-none"></v-col>
-      <v-col cols="12" lg="7">
-        <AdvancedSearch
-          class="mt-n2"
-          v-on:applyAdvancedSearch="onApplyAdvancedSearch"
-        />
-      </v-col>
-    </v-row>
+    <v-expand-transition>
+      <v-row v-if="showAdvancedSetting" class="mt-0 pa-0 d-md-flex d-none">
+        <v-col class="d-lg-block d-none"></v-col>
+        <v-col cols="12" lg="7">
+          <AdvancedSearch
+            class="mt-n2"
+            v-on:applyAdvancedSearch="onApplyAdvancedSearch"
+          />
+        </v-col>
+      </v-row>
+    </v-expand-transition>
   </v-form>
 </template>
 

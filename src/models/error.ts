@@ -4,5 +4,5 @@ export interface ErrorState {
 }
 
 export interface LoadingState {
-  isLoading: boolean[];
+  loadingCound: number;
 }

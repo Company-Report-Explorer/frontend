@@ -3,17 +3,17 @@ import { Commit } from "vuex";
 import { LoadingState } from "@/models/error";
 
 const state: LoadingState = {
-  isLoading: [],
+  loadingCound: 0,
 };
 
 const getters = {
-  isLoading: (state: LoadingState) => state.isLoading.length != 0,
+  isLoading: (state: LoadingState) => state.loadingCound != 0,
 };
 
 const actions = {
   setLoading({ commit }: { commit: Commit }, loading: boolean) {
     if (loading) {
-      commit("pushLoading", loading);
+      commit("pushLoading");
       return;
     }
     setTimeout(() => {
@@ -23,9 +23,8 @@ const actions = {
 };
 
 const mutations = {
-  pushLoading: (state: LoadingState, loading: boolean) =>
-    state.isLoading.push(loading),
-  popLoading: (state: LoadingState) => state.isLoading.pop(),
+  pushLoading: (state: LoadingState) => (state.loadingCound += 1),
+  popLoading: (state: LoadingState) => (state.loadingCound -= 1),
 };
 
 export default {
