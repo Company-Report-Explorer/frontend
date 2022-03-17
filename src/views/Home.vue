@@ -67,6 +67,9 @@ import Vue from "vue";
 export default Vue.extend({
   name: "Home",
   components: { SearchBar },
+  beforeCreate: () => {
+    document.title = "Novel Novels";
+  },
   data: () => {
     return {
       searchTerm: "",
