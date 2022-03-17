@@ -4,7 +4,7 @@
       <v-row>
         <v-col class="text-h1">
           <div>
-            <v-img width="100px" src="@/assets/logo.svg"></v-img>Book Search
+            <v-img width="100px" src="@/assets/logo.svg"></v-img>Novel Novels
           </div>
         </v-col>
       </v-row>
@@ -16,17 +16,6 @@
       </v-row>
       <v-row>
         <v-col>
-          <!-- <v-text-field
-            ref="searchBar"
-            @focus="showAutocomplete = true"
-            @blur="onBlur()"
-            label="Search Term"
-            v-model="searchTerm"
-            clear-icon="mdi-close"
-            @click:append="search"
-            clearable
-            append-icon="mdi-magnify"
-          ></v-text-field> -->
           <SearchBar
             v-on:formSubmit="search"
             v-on:removeHistory="removeHistory"

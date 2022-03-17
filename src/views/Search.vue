@@ -189,6 +189,7 @@ export default Vue.extend({
         query: this.searchTerm,
         options: this.pruneOptions,
       });
+      document.title = `${this.searchTerm} - Novel Novels`;
       this.isLoading = false;
     },
     saveToLocalStorage() {
