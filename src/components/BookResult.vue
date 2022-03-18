@@ -1,11 +1,13 @@
 <template>
-  <div class="mb-4">
-    <v-card class="mx-auto">
+  <div class="d-flex flex-column flex-lg-column-reverse">
+    <div class="text-right font-italic font-weight-light text-caption">
+      Matched book
+    </div>
+    <v-card>
       <v-img
         :src="bookImage"
         v-on:error="imageNotFound = true"
-        height="200px"
-        contain
+        class="d-lg-block d-none"
       ></v-img>
 
       <v-card-title> {{ title }} {{ date ? `(${date})` : "" }} </v-card-title>
@@ -39,8 +41,6 @@
               <br />
               <span class="font-weight-bold">Publication Year:</span>
               {{ date || "-" }} <br />
-              <span class="font-weight-bold">Number of Reviews:</span>
-              {{ addCommas(reviewCount) }} Review(s)
             </div>
             <div class="text-right">
               <a :href="url" target="_blank">
@@ -51,9 +51,7 @@
         </div>
       </v-expand-transition>
     </v-card>
-    <div class="text-right font-italic font-weight-light text-caption">
-      Matched book
-    </div>
+    <v-divider class="mb-3 mt-5 d-block d-lg-none"></v-divider>
   </div>
 </template>
 

@@ -37,3 +37,8 @@ export interface SearchApiResponse {
   results: BookResult[];
   corrected_query: string;
 }
+
+export interface BookMatchApiResponse {
+  retrieval_time: number;
+  result: BookResult;
+}

@@ -16,33 +16,33 @@ export async function callSearchApi(
     ),
   });
 
-  // const response = await axios.get(
-  //   `${process.env.VUE_APP_ROOT_API}/search?${queryParams.toString()}`
-  // );
+  const response = await axios.get(
+    `${process.env.VUE_APP_ROOT_API}/search?${queryParams.toString()}`
+  );
 
   const end = new Date().getTime();
 
-  // return adapter(response.data, (end - start) / 1000);
-  return adapter(
-    {
-      retrieval_time: 1,
-      corrected_query: "",
-      results: [
-        {
-          book_id: "1",
-          book_title: "123456789",
-          author: "123456789",
-          text_reviews_count: 300,
-          isbn: "123456789",
-          image_url: "f",
-          publication_year: 2022,
-          description:
-            "Consequat eu pariatur enim amet Lorem sint reprehenderit ullamco incididunt exercitation enim duis fugiat aliquip. Eiusmod minim magna occaecat Lorem reprehenderit mollit minim. Enim pariatur consequat mollit amet. Pariatur ea cillum ad adipisicing tempor do ad aute quis eu incididunt esse ut deserunt.",
-        },
-      ],
-    },
-    (end - start) / 1000
-  );
+  return adapter(response.data, (end - start) / 1000);
+  // return adapter(
+  //   {
+  //     retrieval_time: 1,
+  //     corrected_query: "Lasse",
+  //     results: [
+  //       {
+  //         book_id: "1",
+  //         book_title: "123456789",
+  //         author: "123456789",
+  //         text_reviews_count: 300,
+  //         isbn: "123456789",
+  //         image_url: "f",
+  //         publication_year: 2022,
+  //         description:
+  //           "Consequat eu pariatur enim amet Lorem sint reprehenderit ullamco incididunt exercitation enim duis fugiat aliquip. Eiusmod minim magna occaecat Lorem reprehenderit mollit minim. Enim pariatur consequat mollit amet. Pariatur ea cillum ad adipisicing tempor do ad aute quis eu incididunt esse ut deserunt.",
+  //       },
+  //     ],
+  //   },
+  //   (end - start) / 1000
+  // );
 }
 
 function adapter(

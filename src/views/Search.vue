@@ -31,24 +31,9 @@
         </router-link>
       </v-col>
     </v-row>
-    <!-- <v-row>
+    <v-row v-if="!isLoading && correctedQuery">
       <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col cols="11" lg="4"> </v-col>
-    </v-row> -->
-    <v-row v-if="isLoading">
-      <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col lg="7">
-        <v-sheet color="blue-grey lighten-5" class="pa-3">
-          <v-skeleton-loader
-            class="mx-auto"
-            type="image, article"
-          ></v-skeleton-loader>
-        </v-sheet>
-      </v-col>
-    </v-row>
-    <v-row v-if="!isLoading && correctedQuery" class="mt-n5">
-      <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col lg="7">
+      <v-col>
         Did you mean
         <span
           class="indigo--text pointer font-weight-bold font-italic"
@@ -59,18 +44,18 @@
         ?
       </v-col>
     </v-row>
-    <v-row v-if="allBooks.length === 0 && !isLoading">
+    <v-row class="d-flex flex-lg-row-reverse">
       <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col class="d-flex justify-center font-weight-medium" lg="8">
-        - No Results Found -
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col class="d-lg-block d-none mb-n3" lg="8"></v-col>
-      <v-col class="relative mb-n3">
+      <v-col
+        cols="12"
+        lg="3"
+        transition="fade-transition"
+        class="pa-lg-0 transition"
+        :class="{ 'opacity-0': isLoading }"
+      >
         <BookResult
-          v-if="bookMatch"
-          class="sticky-card"
+          v-if="bookMatch && bookMatch.id && !isLoading"
+          style="max-width: 100%"
           :title="bookMatch.title"
           :desc="bookMatch.description"
           :author="bookMatch.author"
@@ -82,31 +67,46 @@
           :imgUrl="bookMatch.imageUrl"
         />
       </v-col>
-      <v-col class="d-lg-block d-none mb-n3" lg="1"></v-col>
-    </v-row>
-    <v-row
-      justify="start"
-      transition="fade-transition"
-      v-for="b in allBooks"
-      :key="b.book_id"
-      class="mb-1 transition"
-      v-bind:class="{ 'opacity-0': isLoading }"
-    >
-      <v-col class="d-lg-block d-none" lg="1"></v-col>
       <v-col cols="12" lg="7">
-        <Card
-          :bookId="b.id"
-          :title="b.title"
-          :author="b.author"
-          :date="b.publicationYear"
-          :desc="b.description"
-          :isbn="b.isbn"
-          :rating="b.rating"
-          :reviewCount="b.textReviewsCount"
-          :url="b.url"
-          :imageUrl="b.imageUrl"
-          :query="searchTerm"
-        />
+        <v-row v-if="isLoading">
+          <v-col class="pa-0">
+            <v-sheet color="blue-grey lighten-5" class="pa-3">
+              <v-skeleton-loader
+                class="mx-auto"
+                type="image, article"
+              ></v-skeleton-loader>
+            </v-sheet>
+          </v-col>
+        </v-row>
+        <v-row v-if="allBooks.length === 0 && !isLoading">
+          <v-col class="d-flex justify-center font-weight-medium">
+            - No Results Found -
+          </v-col>
+        </v-row>
+        <v-row
+          justify="start"
+          transition="fade-transition"
+          v-for="b in allBooks"
+          :key="b.book_id"
+          class="mb-1 transition"
+          v-bind:class="{ 'opacity-0': isLoading }"
+        >
+          <v-col>
+            <Card
+              :bookId="b.id"
+              :title="b.title"
+              :author="b.author"
+              :date="b.publicationYear"
+              :desc="b.description"
+              :isbn="b.isbn"
+              :rating="b.rating"
+              :reviewCount="b.textReviewsCount"
+              :url="b.url"
+              :imageUrl="b.imageUrl"
+              :query="searchTerm"
+            />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
@@ -153,6 +153,7 @@ export default Vue.extend({
         localStorage.getItem("history") || "[]"
       ) as string[],
       isLoading: false,
+      bookLoading: false,
       pruneOptions: {},
     };
   },
@@ -184,7 +185,7 @@ export default Vue.extend({
     async search() {
       this.saveToLocalStorage();
       this.isLoading = true;
-      this.fetchBook(this.searchTerm);
+      this.loadBook();
       await this.fetchBooks({
         query: this.searchTerm,
         options: this.pruneOptions,
@@ -212,6 +213,11 @@ export default Vue.extend({
         Object.entries(this.getAdvancedOptions).filter((v) => v[1])
       );
       this.updateSearch(term, true);
+    },
+    async loadBook() {
+      this.bookLoading = true;
+      await this.fetchBook(this.searchTerm);
+      this.bookLoading = false;
     },
   },
   beforeDestroy() {
