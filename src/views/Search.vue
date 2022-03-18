@@ -195,8 +195,8 @@ export default Vue.extend({
       this.isLoading = false;
     },
     saveToLocalStorage() {
-      const isAllowed = localStorage.getItem("isAllowed");
-      if (!isAllowed) return;
+      // const isAllowed = localStorage.getItem("isAllowed");
+      // if (!isAllowed) return;
       this.searchHistory.push(this.searchTerm);
       this.searchHistory = this.searchHistory.filter(
         (value, index, self) => self.indexOf(value) === index

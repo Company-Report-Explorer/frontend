@@ -40,7 +40,7 @@
           >
             Search
           </v-btn>
-          <div class="d-flex justify-end">
+          <!-- <div class="d-flex justify-end">
             <v-switch
               v-model="isAllowedLocalStorage"
               inset
@@ -51,7 +51,7 @@
                 isAllowedLocalStorage ? 'Allow' : 'Not allow'
               } local storage`"
             ></v-switch>
-          </div>
+          </div> -->
         </v-col>
       </v-row>
       <v-row class="my-16" justify="center">
