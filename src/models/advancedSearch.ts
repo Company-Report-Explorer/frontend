@@ -1,6 +1,6 @@
 export interface AdvancedSearchOptions {
   ss: boolean;
-  fromYear: string;
-  toYear: string;
+  fromYear: number;
+  toYear: number;
   rating: number;
 }

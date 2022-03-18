@@ -4,8 +4,8 @@ import { AdvancedSearchOptions } from "@/models/advancedSearch";
 
 const state: AdvancedSearchOptions = {
   ss: false,
-  fromYear: "",
-  toYear: "",
+  fromYear: 0,
+  toYear: 0,
   rating: 0,
 };
 
@@ -48,8 +48,8 @@ const mutations = {
   },
   clearAdvancedOptions: (state: AdvancedSearchOptions) => {
     state.ss = false;
-    state.fromYear = "";
-    state.toYear = "";
+    state.fromYear = 0;
+    state.toYear = 0;
     state.rating = 0;
   },
 };

@@ -137,8 +137,8 @@ export default Vue.extend({
     const options = {
       qe: this.$route.query.qe,
       ss: this.$route.query.ss,
-      fromYear: this.$route.query.fromYear,
-      toYear: this.$route.query.toYear,
+      fromYear: Number(this.$route.query.fromYear),
+      toYear: Number(this.$route.query.toYear),
       rating: this.$route.query.rating,
     };
     this.setAdvancedOptions(options);

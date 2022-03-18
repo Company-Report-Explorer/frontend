@@ -70,7 +70,6 @@ export default Vue.extend({
   data() {
     const oldOptions = this.$store.getters.getAdvancedOptions;
     return {
-      queryExpansion: oldOptions.qe || false,
       strictSearch: oldOptions.ss || false,
       fromYear: oldOptions.fromYear || null,
       toYear: oldOptions.toYear || null,
@@ -84,7 +83,6 @@ export default Vue.extend({
     ...mapActions(["setAdvancedOptions", "clearAdvancedOptions"]),
     apply() {
       const options = {
-        qe: this.queryExpansion,
         ss: this.strictSearch,
         fromYear: this.fromYear,
         toYear: this.toYear,
@@ -94,10 +92,9 @@ export default Vue.extend({
       this.$emit("applyAdvancedSearch");
     },
     reset() {
-      this.queryExpansion = false;
       this.strictSearch = false;
-      this.fromYear = "";
-      this.toYear = "";
+      this.fromYear = 0;
+      this.toYear = 0;
       this.rating = 0;
       this.clearAdvancedOptions();
     },
