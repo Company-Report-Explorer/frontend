@@ -1,86 +1,149 @@
 <template>
   <div class="home">
     <v-row align="center">
-      <v-col class="d-flex justify-center" cols="2" lg="1">
+      <v-col
+        class="d-flex justify-center align-self-start pt-4"
+        cols="2"
+        lg="1"
+      >
         <router-link to="/">
           <v-img class="mb-3" width="50px" src="@/assets/logo.svg"></v-img>
         </router-link>
       </v-col>
-      <v-col cols="6" lg="6">
+      <v-col cols="7" lg="6">
         <SearchBar
           v-on:formSubmit="updateSearch"
           v-on:removeHistory="removeHistory"
+          v-on:applyAdvancedSearch="advancedSearch"
           :found="allBooks.length"
           :retrievalTime="retrievalTime"
+          :totalTime="totalTime"
           :searchTerm="searchTerm"
           :searchHistory="searchHistory"
           :isLoading="isLoading"
+          :showHint="true"
+          :showAdvancedSearch="true"
         />
       </v-col>
-      <v-col class="d-flex justify-end" cols="4" lg="5">
-        <router-link to="/about" class=""> About Us </router-link>
+      <v-col class="d-flex justify-end align-self-start pt-9" cols="3" lg="5">
+        <router-link to="/about" class="text-subtitle-1 text-lg-subtitle-1">
+          About Us
+        </router-link>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="!isLoading && correctedQuery">
       <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col cols="11" lg="4"> </v-col>
-    </v-row>
-    <v-row v-if="isLoading">
-      <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col lg="8">
-        <v-sheet color="blue-grey lighten-5" class="pa-3">
-          <v-skeleton-loader
-            class="mx-auto"
-            type="image, article"
-          ></v-skeleton-loader>
-        </v-sheet>
+      <v-col>
+        Did you mean
+        <span
+          class="indigo--text pointer font-weight-bold font-italic"
+          @click="updateSearch(correctedQuery)"
+        >
+          {{ correctedQuery }}
+        </span>
+        ?
       </v-col>
     </v-row>
-    <v-row v-if="allBooks.length === 0 && !isLoading">
+    <v-row class="d-flex flex-lg-row-reverse">
       <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col class="d-flex justify-center font-weight-medium" lg="8">
-        - No Results Found -
-      </v-col>
-    </v-row>
-    <v-row
-      justify="start"
-      transition="fade-transition"
-      v-for="b in allBooks"
-      :key="b.title"
-      class="mb-1 transition"
-      v-bind:class="{ 'opacity-0': isLoading }"
-    >
-      <v-col class="d-lg-block d-none" lg="1"></v-col>
-      <v-col cols="12" lg="8">
-        <Card
-          :bookId="b.id"
-          :title="b.title"
-          :author="b.author"
-          :date="b.publicationYear"
-          :desc="b.description"
-          :isbn="b.isbn"
-          :rating="b.rating"
-          :reviewCount="b.textReviewsCount"
-          :url="b.url"
-          :imageUrl="b.imageUrl"
-          :query="searchTerm"
+      <v-col
+        cols="12"
+        lg="3"
+        transition="fade-transition"
+        class="pa-lg-0 transition"
+        :class="{ 'opacity-0': isLoading }"
+      >
+        <BookResult
+          v-if="bookMatch && bookMatch.id && !isLoading"
+          style="max-width: 100%"
+          :title="bookMatch.title"
+          :desc="bookMatch.description"
+          :author="bookMatch.author"
+          :date="bookMatch.publicationYear"
+          :isbn="bookMatch.isbn"
+          :rating="bookMatch.rating"
+          :reviewCount="bookMatch.textReviewsCount"
+          :url="bookMatch.url"
+          :imgUrl="bookMatch.imageUrl"
         />
+      </v-col>
+      <v-col cols="12" lg="7">
+        <v-row v-if="isLoading">
+          <v-col class="pa-0">
+            <v-sheet color="blue-grey lighten-5" class="pa-3">
+              <v-skeleton-loader
+                class="mx-auto"
+                type="image, article"
+              ></v-skeleton-loader>
+            </v-sheet>
+          </v-col>
+        </v-row>
+        <v-row v-if="allBooks.length === 0 && !isLoading">
+          <v-col class="d-flex justify-center font-weight-medium">
+            - No Results Found -
+          </v-col>
+        </v-row>
+        <v-row
+          justify="start"
+          transition="fade-transition"
+          v-for="b in allBooks"
+          :key="b.book_id"
+          class="mb-1 transition"
+          v-bind:class="{ 'opacity-0': isLoading }"
+        >
+          <v-col>
+            <Card
+              :bookId="b.id"
+              :title="b.title"
+              :author="b.author"
+              :date="b.publicationYear"
+              :desc="b.description"
+              :isbn="b.isbn"
+              :rating="b.rating"
+              :reviewCount="b.textReviewsCount"
+              :url="b.url"
+              :imageUrl="b.imageUrl"
+              :query="searchTerm"
+            />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script lang="ts">
+import Vue from "vue";
+import { mapGetters, mapActions } from "vuex";
+
 import Card from "@/components/Card.vue";
 import SearchBar from "@/components/SearchBar.vue";
-import { mapGetters, mapActions } from "vuex";
-import Vue from "vue";
+import BookResult from "@/components/BookResult.vue";
+
 export default Vue.extend({
   name: "Home",
-  computed: mapGetters(["allBooks", "retrievalTime"]),
+  computed: mapGetters([
+    "allBooks",
+    "retrievalTime",
+    "totalTime",
+    "correctedQuery",
+    "getAdvancedOptions",
+    "bookMatch",
+  ]),
   created() {
     this.searchTerm =
       typeof this.$route.query.q === "string" ? this.$route.query.q : "";
+    const options = {
+      qe: this.$route.query.qe,
+      ss: this.$route.query.ss,
+      fromYear: this.$route.query.fromYear,
+      toYear: this.$route.query.toYear,
+      rating: this.$route.query.rating,
+    };
+    this.setAdvancedOptions(options);
+    this.pruneOptions = Object.fromEntries(
+      Object.entries(options).filter((v) => v[1])
+    );
     if (this.searchTerm) this.search();
   },
   data: () => {
@@ -90,26 +153,44 @@ export default Vue.extend({
         localStorage.getItem("history") || "[]"
       ) as string[],
       isLoading: false,
+      bookLoading: false,
+      pruneOptions: {},
     };
   },
-  components: { Card, SearchBar },
+  components: { Card, SearchBar, BookResult },
   methods: {
-    ...mapActions(["fetchBooks"]),
-    updateSearch(term: string) {
-      if (!term || this.$route.query.q === term) return;
+    ...mapActions([
+      "fetchBooks",
+      "fetchBook",
+      "clearAdvancedOptions",
+      "clearReviews",
+      "setAdvancedOptions",
+    ]),
+    updateSearch(term: string, force: boolean = false) {
+      if (!force && (!term || this.$route.query.q === term)) return;
       this.searchTerm = term;
-      this.$router.push({
-        name: "Search",
-        query: {
-          q: this.searchTerm,
-        },
-      });
+      this.$router
+        .push({
+          name: "Search",
+          query: {
+            q: this.searchTerm,
+            ...this.pruneOptions,
+          },
+        })
+        .catch((err) => {
+          console.log("Error occurred: ", err);
+        });
       this.search();
     },
     async search() {
       this.saveToLocalStorage();
       this.isLoading = true;
-      await this.fetchBooks(this.searchTerm);
+      this.loadBook();
+      await this.fetchBooks({
+        query: this.searchTerm,
+        options: this.pruneOptions,
+      });
+      document.title = `${this.searchTerm} - Novel Novels`;
       this.isLoading = false;
     },
     saveToLocalStorage() {
@@ -119,7 +200,7 @@ export default Vue.extend({
       this.searchHistory = this.searchHistory.filter(
         (value, index, self) => self.indexOf(value) === index
       );
-      if (this.searchHistory.length >= 5)
+      if (this.searchHistory.length > 5)
         this.searchHistory = this.searchHistory.slice(1);
       localStorage.setItem("history", JSON.stringify(this.searchHistory));
     },
@@ -127,15 +208,38 @@ export default Vue.extend({
       this.searchHistory = this.searchHistory.filter((v) => v !== history);
       localStorage.setItem("history", JSON.stringify(this.searchHistory));
     },
+    advancedSearch(term: string) {
+      this.pruneOptions = Object.fromEntries(
+        Object.entries(this.getAdvancedOptions).filter((v) => v[1])
+      );
+      this.updateSearch(term, true);
+    },
+    async loadBook() {
+      this.bookLoading = true;
+      await this.fetchBook(this.searchTerm);
+      this.bookLoading = false;
+    },
+  },
+  beforeDestroy() {
+    this.clearReviews();
+    this.clearAdvancedOptions();
   },
 });
 </script>
 
 <style>
+.relative {
+  position: relative;
+}
 .transition {
   transition: all 1s;
 }
 .opacity-0 {
   opacity: 0;
+}
+@media (min-width: 1264px) {
+  .sticky-card {
+    position: absolute;
+  }
 }
 </style>

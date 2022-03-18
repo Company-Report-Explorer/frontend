@@ -1,5 +1,7 @@
-import { callReviewApi } from "@/api/review";
 import { Commit } from "vuex";
+
+import { callReviewApi } from "@/api/review";
+import { ReviewState, ReviewResult } from "@/models/review";
 
 const state: ReviewState = {
   reviews: [],

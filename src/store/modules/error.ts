@@ -1,5 +1,7 @@
 import { Commit } from "vuex";
 
+import { ErrorState } from "@/models/error";
+
 const state: ErrorState = {
   isShown: false,
   detail: "",

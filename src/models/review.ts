@@ -1,4 +1,4 @@
-interface ReviewResponse {
+export interface ReviewResponse {
   review_id: string;
   review_text: string;
   review_likes?: number;
@@ -6,17 +6,17 @@ interface ReviewResponse {
   review_comments?: number;
 }
 
-interface ReviewState {
+export interface ReviewState {
   reviews: ReviewResult[];
   isEnd?: boolean;
 }
 
-interface GetReviewsResponse {
+export interface GetReviewsResponse {
   reviews: ReviewResponse[];
   is_end?: boolean;
 }
 
-interface ReviewResult {
+export interface ReviewResult {
   id: string;
   text: string;
   likes?: number;

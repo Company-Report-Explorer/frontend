@@ -1,8 +1,8 @@
-interface ErrorState {
+export interface ErrorState {
   isShown: boolean;
   detail: string;
 }
 
-interface LoadingState {
-  isLoading: boolean;
+export interface LoadingState {
+  loadingCound: number;
 }

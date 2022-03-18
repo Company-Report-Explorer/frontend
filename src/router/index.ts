@@ -19,7 +19,14 @@ const routes: Array<RouteConfig> = [
     path: "/search",
     name: "Search",
     component: () => import("../views/Search.vue"),
-    props: (route) => ({ query: route.query.q }),
+    props: (route) => ({
+      query: route.query.q,
+      ss: route.query.ss,
+      qe: route.query.qe,
+      fromYear: route.query.fromYear,
+      toYear: route.query.toYear,
+      rating: route.query.rating,
+    }),
   },
 ];
 

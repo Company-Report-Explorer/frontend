@@ -25,9 +25,12 @@ instance.interceptors.response.use(
       // console.info("*", config);
       store.dispatch("setLoading", false);
     }
+    if (config.data?.error_message)
+      store.dispatch("setError", config.data.error_message);
     return config;
   },
   (error) => {
+    console.log(error);
     {
       store.dispatch("setLoading", false);
       store.dispatch("setError", "Network Error");

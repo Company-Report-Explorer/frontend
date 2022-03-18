@@ -13,32 +13,14 @@
           </v-img>
         </v-col>
         <v-col>
-          <v-card-title>{{ title }} ({{ date }})</v-card-title>
+          <v-card-title>{{ title }} {{ date ? `(${date})` : "" }}</v-card-title>
           <v-card-subtitle>
             by
             <span class="font-weight-bold">{{ author }}</span>
           </v-card-subtitle>
           <v-divider></v-divider>
           <v-card-subtitle class="pb-0">
-            {{ description }}
-            <span v-if="desc.length > 200">
-              <span
-                class="font-weight-bold text-caption indigo--text"
-                style="cursor: pointer"
-                v-if="!showMore"
-                @click="showMore = !showMore"
-              >
-                Show More
-              </span>
-              <span
-                class="font-weight-bold text-caption indigo--text"
-                style="cursor: pointer"
-                v-else
-                @click="showMore = !showMore"
-              >
-                Show Less
-              </span>
-            </span>
+            <TextShowMore :fullText="desc" />
           </v-card-subtitle>
 
           <v-card-actions>
@@ -55,6 +37,7 @@
               :bookId="bookId"
               :query="query"
               :bookTitle="title"
+              :noOfReviews="reviewCount"
               :reviews="[]"
               @fetch="fetchReviews({ bookId, query })"
             />
@@ -66,10 +49,12 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
+import { mapActions } from "vuex";
+
 import Details from "@/components/BookDetails.vue";
 import Review from "@/components/ReviewDialog.vue";
-import { mapActions } from "vuex";
-import Vue from "vue";
+import TextShowMore from "@/components/TextShowMore.vue";
 export default Vue.extend({
   props: {
     bookId: String,
@@ -91,7 +76,7 @@ export default Vue.extend({
       noImageSrc: require("@/assets/noImage.jpeg"),
     };
   },
-  components: { Review, Details },
+  components: { Review, Details, TextShowMore },
   computed: {
     description() {
       return this.showMore || String(this.desc).length <= 200
