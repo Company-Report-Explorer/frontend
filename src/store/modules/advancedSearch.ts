@@ -3,7 +3,6 @@ import { Commit } from "vuex";
 import { AdvancedSearchOptions } from "@/models/advancedSearch";
 
 const state: AdvancedSearchOptions = {
-  qe: false,
   ss: false,
   fromYear: "",
   toYear: "",
@@ -12,12 +11,17 @@ const state: AdvancedSearchOptions = {
 
 const getters = {
   getAdvancedOptions: (state: AdvancedSearchOptions) => state,
+  getAdvancedOptionsReq: (state: AdvancedSearchOptions) => {
+    const tempState = {
+      ss: state.ss,
+      from_year: state.fromYear,
+      to_year: state.toYear,
+      rating: state.rating,
+    };
+    return Object.fromEntries(Object.entries(tempState).filter((v) => v[1]));
+  },
   isAdvancedOptionsOn: (state: AdvancedSearchOptions) =>
-    state.qe ||
-    state.ss ||
-    !!state.fromYear ||
-    !!state.toYear ||
-    !!state.rating,
+    state.ss || !!state.fromYear || !!state.toYear || !!state.rating,
 };
 
 const actions = {
@@ -37,14 +41,12 @@ const mutations = {
     state: AdvancedSearchOptions,
     options: AdvancedSearchOptions
   ) => {
-    state.qe = options.qe;
     state.ss = options.ss;
     state.fromYear = options.fromYear;
     state.toYear = options.toYear;
     state.rating = options.rating;
   },
   clearAdvancedOptions: (state: AdvancedSearchOptions) => {
-    state.qe = false;
     state.ss = false;
     state.fromYear = "";
     state.toYear = "";

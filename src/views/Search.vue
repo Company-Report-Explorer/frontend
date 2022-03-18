@@ -129,6 +129,7 @@ export default Vue.extend({
     "correctedQuery",
     "getAdvancedOptions",
     "bookMatch",
+    "getAdvancedOptionsReq",
   ]),
   created() {
     this.searchTerm =
@@ -188,7 +189,7 @@ export default Vue.extend({
       this.loadBook();
       await this.fetchBooks({
         query: this.searchTerm,
-        options: this.pruneOptions,
+        options: this.getAdvancedOptionsReq,
       });
       document.title = `${this.searchTerm} - Novel Novels`;
       this.isLoading = false;
