@@ -27,6 +27,7 @@ export interface Book {
 export interface SearchState {
   retrievalTime: number;
   totalTime: number;
+  book?: Book;
   books: Book[];
   correctedQuery: string;
 }
@@ -35,4 +36,9 @@ export interface SearchApiResponse {
   retrieval_time: number;
   results: BookResult[];
   corrected_query: string;
+}
+
+export interface BookMatchApiResponse {
+  retrieval_time: number;
+  result: BookResult;
 }
