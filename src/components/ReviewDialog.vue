@@ -9,7 +9,7 @@
         v-on="on"
         @click="$emit('fetch')"
       >
-        Reviews ({{ noOfReviews > 99 ? "99+" : noOfReviews || 0 }})
+        Reviews
       </v-btn>
     </template>
     <v-card>

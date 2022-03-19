@@ -2,7 +2,7 @@
   <div>
     <v-card class="mx-auto">
       <v-row>
-        <v-col cols="12" sm="2">
+        <v-col cols="12" sm="3">
           <v-img
             class="ml-sm-6"
             height="100%"
